@@ -1,0 +1,68 @@
+2015-10-29: MenglongWoo
+    - LCD是否异常的硬件检测
+        - LCD没有按下时+X/-X，+Y/-Y,两低电平和3.3V，这4个引脚不受程序控影响；
+        - LCD按下后高电平的两根变成低电平，但是不完全是0，与坐标电阻有关，由此可以得知LCD触屏硬件是否正常
+        - 同样按下后IRQ为电平，但是该引脚可能受到程序的影响而反复波动（看是谁写的代码咯）如果不使能ADS7843，即使按下后也是低电平，所以不建议检测该引脚
+    - 反馈上面的情况给刘文俊，他去处理4根线的正确连接
+    - 刘文俊对LCD触屏跳线，触屏能用了
+    - 修改校准坐标处理函数TC_Adj，现在只是保证能得到正确的校准坐标，但用户体验很不好，后期会维护
+
+2015-10-28: MenglongWoo
+    - Add 完成uLaser测试平台的调试UI界面，便于刘文俊调试硬件，后期会整改
+    - 5V电源控制
+        - ON
+        - OFF
+    - APD电压选择
+        - 20V
+        - 40V
+    - PWM通道选择
+    - PWM反转
+        - Normal
+        - Reversal
+    -PWM脉宽
+    -LD输出选择
+        - LV
+        - MV
+        - HV
+    - TODO LCD校准
+        - 5点校准界面
+        - 校准测试
+        - 校准保存或取消
+
+2015-10-27: MenglongWoo
+    - Add 完成uLaser测试平台的硬件操作，包括如下
+    - LED
+        - 备用PWM 的LED灯
+            - PWM1/PA4/D1
+            - PWM2/PA5/D2
+    - 连续激光器
+        - LED
+            - LED3/PC8/D11
+            - LED4/PC9/D12
+            - LED5/PC7/D10
+        - 输出控制
+            - LD1/PC4
+            - LD2/PB10
+            - LD3/PB11
+    - APD电压选择
+        - APD电压选择
+            - LED6/PD12/D6
+            - LED7/PC13/D7
+    - PWM输出信号
+        - LED1/PA6/D8
+        - LED2/PA7/D9
+    - 电源
+        - 1593EN/PA12/U3_P7
+    - Serial
+        - Tx/PC10
+        - RX/PC11
+    - 按键
+        - EINT0/PE2/SW2
+        - EINT1/PE3/SW5
+        - EINT2/PE4/SW4
+        - EINT3/PE5/SW6
+        - EINT4/PE6/SW3
+    - LCD
+        - RESET/PC6
+        - CS/PD7
+        - TE/PB12 Tearing Effect Signal

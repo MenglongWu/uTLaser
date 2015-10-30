@@ -1,0 +1,101 @@
+/*!
+*	手持稳定光源功能:
+*		- 光源可调范围0 ~ -17dBm（产品实际需求是0 ~ -10dBm）
+*		- 可调精度1dBm（硬件能实现0 ~ -10dBm范围内±0.020dBm可调精度）
+*		- 6个按键
+*			-# 开机键：长按实现开关功能
+*			-# mode键：
+*				-# 短按实现非可见光波长切换（CW、270Hz、1KHz、2KHz），或从关闭光源模式中跳出
+*				-# 长按实现关闭非可见光输出/恢复输出
+*			-# up键：功率增加1dBm
+*			-# dowm键：功率减小1dBm
+*			-# red/timer键：
+*				-# 短按实现红光输出模式切换（CW、2Hz、Off）
+*				-# 长按实现10min误操作定时关机，关闭定时关机功能
+*			-# 入键：切换输出波长1310/1550/1490
+*		- 进入软件设置可设置软件功能
+*			-# 可选输出波长，满足2非可见光/3非可见光配置
+*			-# 可选是否有红光功能
+*			-# 序列号记录
+*			-# 光源输出功率可校准（以-10dBm为校准源）
+
+*	文件结构:
+*		- main.c 				主程序
+*		- PictureData.c 		16位彩色图片资源
+*		- gl_ui.c 			图形接口
+*		- zimo_st9.c 			部分ascii码宋体9号字体
+*		- key.c   			按键扫描
+*		- flash.c  			内部flash读写
+*		- usart.c   			外部
+*
+*  A list of events:
+*    - mouse events
+*         -# mouse move event
+*         -# mouse click event\n
+*			More info about the click event.
+*         -# mouse double click event
+*    - keyboard events
+*         1. key down event
+*         2. key up event
+*
+*  More text here.
+*/
+/** @mainpage 
+- TS100_VEx1.2.3_手持稳定光源_20140418
+- 1、添加非可见光关闭功能，在插光接口时候保护人眼，长按Mode键可实现该功能，该版本仅供公司内部使用。
+- 2、修改KeyDown_Ex函数返回值意义，原来返回值x100得到按键长按时间（ms），现在直接返回具体时间（ms），并且把扫描间隔从100ms缩短到10ms。
+*/
+/** @mainpage 
+*
+* @authors Documentation Task Force
+*
+* @section intro Introduction
+* This package provides code templates for use by GLAST developers. 
+* All header files for external access are located in the templates directory,
+* as it is customary to put external public header files in the packageName 
+* directory. Header files that are not meant for external access reside in 
+* the src directory. Source files are located in the src directory. Files 
+* related to loading sharable libraries are located in the src/Dll directory.
+* There are 3 examples:
+* 
+* - User-Defined generic C++ class
+* -# templates/ClassTemplate.h
+* -# src/ClassTemplate.cxx
+* - User-Defined Gaudi Algorithm
+* -# src/ExampleAlg.cxx
+* -# src/Dll/templates_dll.cxx
+* -# src/Dll/templates_load.cxx
+* - User-Defined Gaudi Service
+* -# templates/IExampleSvc.h
+* -# templates/ExampleSvc.h
+* -# src/ExampleSvc.cxx
+* -# src/Dll/templates_dll.cxx
+* -# src/Dll/templates_load.cxx
+*
+*
+* Also note the existence of the following directories:
+* - cmt
+* -# Contains the requirements file
+* - doc
+* -# Contains the release.notes file
+*
+*
+* As you prepare to develop code for GLAST SAS, please be sure you are aware 
+* of our current
+* <A HREF="http://www-glast.slac.stanford.edu/software/CodeHowTo/codeStandards.html"> Coding Standards </A>
+*
+*
+* If using the code in this package as an example - please modify the comments
+* as appropriate for your own specific code.
+*
+* <hr>
+* @section notes release.notes
+* release.notes
+* <hr>
+* @section requirements requirements
+* @verbinclude requirements
+* <hr> 
+* @todo [optionally include text about more work to be done]
+* @todo Give each todo item its own line
+*
+*/

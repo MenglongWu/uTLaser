@@ -1,0 +1,7 @@
+*.o
+*.sublime-project
+*.sublime-workspace
+.tags_sorted_by_file
+.tags
+MDK-ARM/Output
+*.bak
