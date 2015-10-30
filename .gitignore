@@ -3,5 +3,5 @@
 *.sublime-workspace
 .tags_sorted_by_file
 .tags
-MDK-ARM/Output
 *.bak
+MDK-ARM/Output
