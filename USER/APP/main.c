@@ -3134,9 +3134,9 @@ void Init_Key()
 
 int32_t ScanKey()
 {
-	if(KeyDown(KEY_GPIO_X, KEY_LT)) {
+	if(KeyPress(KEY_GPIO_X, KEY_LT)) {
 		printf("KEY_LT\r\n");
-		// GUI_StoreKeyMsg(GUI_KEY_LEFT,1);
+		GUI_StoreKeyMsg(GUI_KEY_SHIFT_TAG,1);
 		return 0;
 	}
 	else if(KeyPress(KEY_GPIO_X, KEY_RT)) {
@@ -3145,18 +3145,18 @@ int32_t ScanKey()
 		// GUI_StoreKeyMsg(GUI_KEY_RIGHT,1);
 		return 0;
 	}
-	else if(KeyDown(KEY_GPIO_X, KEY_M)) {
+	else if(KeyPress(KEY_GPIO_X, KEY_M)) {
 
 		printf("KEY_M\r\n");
 		GUI_StoreKeyMsg(GUI_KEY_ENTER,1);
 		return 0;
 	}
-	else if(KeyDown_Ex(KEY_GPIO_X, KEY_LB)) {
+	else if(KeyPress(KEY_GPIO_X, KEY_LB)) {
 		printf("KEY_LB\r\n");
 		GUI_StoreKeyMsg(GUI_KEY_TAB,1);
 		return 0;
 	}
-	else if(KeyDown(KEY_GPIO_X, KEY_RB)) {
+	else if(KeyPress(KEY_GPIO_X, KEY_RB)) {
 		printf("KEY_RB\r\n");
 		return 0;
 	}

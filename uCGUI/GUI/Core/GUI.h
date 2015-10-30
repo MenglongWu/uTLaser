@@ -84,7 +84,8 @@ Note that we have chosen the values to be close to existing
 #define GUI_KEY_F1                40
 #define GUI_KEY_F2                41
 
-
+#define GUI_KEY_FLAG_SHIFT        (1 << 25)  // shift hold
+#define GUI_KEY_SHIFT_TAG         (GUI_KEY_FLAG_SHIFT | GUI_KEY_TAB)
 /*********************************************************************
 *
 *       Dialog item IDs
