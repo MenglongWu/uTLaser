@@ -18,7 +18,8 @@ Purpose	 : Demonstrates a owner drawn list box
 #include "wm.h"
 #include "project.h"
 #include "USER/TouchPanel/touch.h"
-
+#include "prj_type.h"
+#include "flash.h"
 
 
 static FRAMEWIN_Handle hFrame = 0;
@@ -94,8 +95,37 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 // 	}
 // }
 
-// ***************************************************************************
+int IsGood(int a, int b, int dt)
+{
+	printf("a - b dt %d %d %d\r\n", a, b, dt);
+	if ( (a - b) < dt &&
+		(a - b) > -dt) {
+		printf("is good \r\n");
+		return 1;
+	}
+	printf("is bad\r\n");
+	return 0;
+}
+int CheckAdj(struct point *adj)
+{
+	printf("%d %d\r\n",adj[0].x, adj[0].y);
+	printf("%d %d\r\n",adj[1].x, adj[1].y);
+	printf("%d %d\r\n",adj[2].x, adj[2].y);
+	printf("%d %d\r\n",adj[3].x, adj[3].y);
+	printf("%d %d\r\n",adj[4].x, adj[4].y);
+	if (
+		IsGood(adj[0].x, adj[1].x,200) &&
+		IsGood(adj[2].x, adj[3].x,200) &&
+		IsGood(adj[0].y, adj[2].y,200) &&
+		IsGood(adj[1].y, adj[3].y,200) ) {
+		printf("all good\r\n");
+	}
 
+		// isGood((adj[0].x + adj[1].x)/2, adj[3].x,60) &&
+}
+
+// ***************************************************************************
+#define FLIT_TP (100)
 GUI_POINT poly[6] = {
 	{0, -10},
 	{0,10},
@@ -104,6 +134,7 @@ GUI_POINT poly[6] = {
 	{10,0},
 	{0,0},
 };
+extern struct project_env g_env;
 /*********************************************************************
 *
 *		 _cbCallback
@@ -120,6 +151,8 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 	GUI_PID_STATE state;
 	GUI_POINT polya[3];
 	WM_MESSAGE smsg;
+	static struct point adj[5],adjprev={3333,1111};
+	int dt;
 	WM_HWIN hDlg, hListBox, hItem;
 	GUI_POINT pt[] = {
 		{60,                 60},
@@ -129,7 +162,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		{LCD_XSIZE_TFT / 2, LCD_YSIZE_TFT / 2},
 		{0, 0},
 	};
-
+	struct adj_tp tpadj;
 	hDlg = pMsg->hWin;
 	hListBox = WM_GetDialogItem(hDlg, GUI_ID_MULTIEDIT0);
 
@@ -143,19 +176,28 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		// FRAMEWIN_AddCloseButton(pMsg->hWin, FRAMEWIN_BUTTON_RIGHT, 0);
 		// hFrame = WM_GetDialogItem(pMsg->hWin, 0);
 		FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
-		// FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));
+		FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));
 		FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
 		// Init_Ctrl(pMsg);
 	case WM_TOUCH:
 		{
-			struct point pt;
+			// struct point pt;
 
 			if (TP_IsPress()) {
-				gettouch(&pt);
+				gettouch(&adj[index]);
 				Delay_ms(100);
 				if (TP_IsPress()) {
-					gettouch(&pt);	
-					printf("touch %d %d\r\n", pt.x, pt.y);	
+					gettouch(&adj[index]);
+
+					dt = ((adj[index].x + adj[index].y) - (adjprev.x + adjprev.y) );
+					printf("dt %d %d %d\r\n", dt, adj[index].x , adj[index].y);
+					if ( dt < FLIT_TP && dt > -FLIT_TP) {
+						break;
+					}
+					adjprev.x = adj[index].x;
+					adjprev.y = adj[index].y;
+
+					printf("touch %d %d\r\n", adj[index].x, adj[index].y);	
 
 					GUI_FillPolygon(poly,6, 22,22);
 					// WM_InvalidateWindow(this);
@@ -182,6 +224,22 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 			index = 0;
 			// WM_DeleteWindow(this);
 			// GUI_EndDialog(this, 1);
+			if (CheckAdj(adj) ) {
+				GUI_DispStringAt("----OK----\nTouch adjust success", LCD_XSIZE_TFT / 2-40, LCD_YSIZE_TFT / 2);
+				tp_adj(pt, adj, &g_env.adj_tp);
+				
+				g_env.flag = 0xaabbccdd;
+				WriteFlash(FLASH_PAGE_START, 
+					(uint32_t*)&(g_env), 
+					sizeof(struct project_env));
+				tp_setadj(&g_env.adj_tp);
+
+				
+			}
+			else {
+				GUI_DispStringAt("----ERROR----\nPlease adjust again!!!",LCD_XSIZE_TFT / 2 - 40, LCD_YSIZE_TFT / 2);
+			}
+			Delay_ms(2000);
 			WM_HideWindow(this);
 		}
 	
