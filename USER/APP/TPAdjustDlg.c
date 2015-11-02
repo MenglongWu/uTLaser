@@ -36,8 +36,8 @@ static WM_HWIN this = 0;
 
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320/2, 240 , FRAMEWIN_CF_MOVEABLE },
-	//	 { LISTBOX_CreateIndirect,	 0,						 GUI_ID_MULTIEDIT0,	10,	10, 100, 100, 0, 100 },
+	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320, 240 , FRAMEWIN_CF_MOVEABLE },
+		 // { LISTBOX_CreateIndirect,	 0,						 GUI_ID_MULTIEDIT0,	10,	10, 100, 100, 0, 100 },
 	// /* Check box for multi select mode */
 	//	 { CHECKBOX_CreateIndirect,	0,						 GUI_ID_CHECK0,	 120,	10,	 0,	 0 },
 	//	 { TEXT_CreateIndirect,		"Multi select",			0,				 140,	10,	80,	15, TEXT_CF_LEFT },
@@ -48,7 +48,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	//	 { BUTTON_CreateIndirect,	"OK",						GUI_ID_OK,		 120,	65,	80,	20 },
 	//	 { BUTTON_CreateIndirect,	"Cancel",					GUI_ID_CANCEL,	 120,	90,	80,	20 },
 	// {BUTTON_CreateIndirect,	 "ON/OFF",					GUI_ID_PP,	 22,15,136,136},
-	{BUTTON_CreateIndirect,	 "APD",						GUI_ID_APD,	 162,15,66,66},
+	// {BUTTON_CreateIndirect,	 "APD",						GUI_ID_APD,	 162,15,66,66},
 	// {BUTTON_CreateIndirect,	 "PWM",						GUI_ID_PWM,	 232,15,66,66},
 	// {BUTTON_CreateIndirect,	 "PWM\r\nNormal",			GUI_ID_PWM_REVERSAL,	 162,85,66,66},
 	// {BUTTON_CreateIndirect,	 "1us",						GUI_ID_PWM_WIDTH,	 232,85,66,66},
@@ -134,57 +134,17 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 	hListBox = WM_GetDialogItem(hDlg, GUI_ID_MULTIEDIT0);
 
 
-	printf("%x %x %x\n", pMsg->MsgId, pMsg->hWin,pMsg->hWinSrc);
+	// printf("%x %x %x\n", pMsg->MsgId, pMsg->hWin,pMsg->hWinSrc);
 	switch (pMsg->MsgId) {
-	// case WM_KEY:
-	// 	Id = WM_GetId(pMsg->hWinSrc);
-
-	// 	switch (Id) {
-	// 	case GUI_ID_PP:
-	// 		OnPerPowerClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_APD:
-	// 		OnAPDClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_PWM:
-	// 		OnPWMClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_PWM_REVERSAL:
-	// 		OnReversalClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_PWM_WIDTH:
-	// 		OnWidthClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_LASTER:
-	// 		OnLaserClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_SETTING:
-	// 		OnSettingClick(pMsg);
-	// 	default:
-	// 		break;
-	// 	}
-		
-	// 	// hButton1 = WM_GetDialogItem(pMsg->hWin, GUI_ID_BUTTON0);
-	// 	// hButton1 = pMsg->hWinSrc;
-	// 	// // BUTTON_SetText(hButton1, "sdfffr");
-	// 	// BUTTON_GetText(hButton1,strout,222);
-	// 	// if (strout[0] == 'a') {
-	// 	// 	BUTTON_SetText(hButton1, "bbbb");
-	// 	// }
-	// 	// else {
-	// 	// 	BUTTON_SetText(hButton1, "aaaa");
-	// 	// }
-	// 	// printf(".............................\r\n");
-	// 	break;
 	case WM_INIT_DIALOG:
 		// hButton1 = WM_GetDialogItem(pMsg->hWin, GUI_ID_BUTTON0);
 		// BUTTON_SetText(hButton1, "dfwer");
 		// GUI_SetFont(&GUI_Font8x10_ASCII);
-		FRAMEWIN_AddCloseButton(pMsg->hWin, FRAMEWIN_BUTTON_RIGHT, 0);
+		// FRAMEWIN_AddCloseButton(pMsg->hWin, FRAMEWIN_BUTTON_RIGHT, 0);
 		// hFrame = WM_GetDialogItem(pMsg->hWin, 0);
-		// FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
+		FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
 		// FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));
-		// FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
+		FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
 		// Init_Ctrl(pMsg);
 	case WM_TOUCH:
 		{
@@ -199,6 +159,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 
 					GUI_FillPolygon(poly,6, 22,22);
 					// WM_InvalidateWindow(this);
+					index++;
 					WM_HideWindow(this);
 					WM_ShowWindow(this);
 					// WM_Paint(this);
@@ -209,10 +170,6 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		
 		break;
 	case WM_PAINT:
-		// GUI_SetBkColor(GUI_RED);
-		// GUI_Clear();
-		// TC_Adj();
-
 		GUI_SetColor(RGB(255,0,0));
 		for (i = 0; i < 5; i++) {
 			GUI_FillPolygon(poly,6, pt[i].x,pt[i].y);
@@ -220,7 +177,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		GUI_SetColor(RGB(0,255,0));
 		GUI_FillPolygon(poly,6, pt[index].x,pt[index].y);
 		printf("index = %d\r\n", index);
-		index++;
+		
 		if (index >= 5) {
 			index = 0;
 			// WM_DeleteWindow(this);
@@ -229,89 +186,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		}
 	
 		break;
-	// case WM_NOTIFY_PARENT:
-	// 	Id = WM_GetId(pMsg->hWinSrc);
-	// 	NCode = pMsg->Data.v;		
-	// 	switch(NCode) {
-	// case WM_NOTIFICATION_CLICKED:
-
-	// 	Id = WM_GetId(pMsg->hWinSrc);
-	// 	WM_SetFocus(pMsg->hWinSrc);
-	// 	switch (Id) {
-	// 	case GUI_ID_PP:
-	// 		OnPerPowerClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_APD:
-	// 		OnAPDClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_PWM:
-	// 		OnPWMClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_PWM_REVERSAL:
-	// 		OnReversalClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_PWM_WIDTH:
-	// 		OnWidthClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_LASTER:
-	// 		OnLaserClick(pMsg);
-	// 		break;
-	// 	case GUI_ID_SETTING:
-	// 		OnSettingClick(pMsg);
-	// 	default:
-	// 		break;
-	// 	}
-	// 	break;
-	// 	hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-	// 	BUTTON_SetText(hButton1, "Click");	
-
-	// 	break;
-	// case WM_NOTIFICATION_GOT_FOCUS:
-	// 	hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-	// 	BUTTON_SetTextColor(hButton1, 0, RGB(255,0,0));
-	// 	break;
-	// case WM_NOTIFICATION_LOST_FOCUS:
-	// 	hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-	// 	if (sg_bppdown == 0) {
-			
-	// 		BUTTON_SetTextColor(hButton1, 0, RGB(0,0,0));	
-	// 	}
-	// 	else {
-	// 		BUTTON_SetTextColor(hButton1, 0, RGB(255,255,255));		
-	// 	}
-		
-	// 	break;
-	// 	}
-	// 	break;
-
-
-
-
-	// 	GUI_PID_GetState(&state);
-
-	// 	if (state.Pressed == 1) {
-	// 		if (fpress == 0) {
-	// 			fpress = 1;
-	// 			y0 = state.y;
-	// 			WM_GetWindowRectEx(pMsg->hWin, &rect);
-	// 			break;
-	// 		}
-	// 		else {
-	// 			WM_MoveTo(pMsg->hWin, 0, rect.y0 + state.y - y0 );
-	// 		}
-	// 		sprintf(strout,"%d %d[%d] [%d] %d\n%d %d %d",state.x,state.y,state.Pressed, fpress,
-	// 			rect.y0 + state.y - y0 ,
-	// 			rect.y0, state.y , y0);
-	// 		GUI_DispStringAt(strout, 0, 10); // 显示文本
-	// 	}
-	// 	else {
-	// 		fpress = 0;
-	// 		TurnBack(pMsg->hWin);
-	// 	}
-
-
-
-	// 	break;
+	
 	default:
 		WM_DefaultProc(pMsg);
 	}
