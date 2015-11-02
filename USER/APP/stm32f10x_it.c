@@ -61,34 +61,34 @@ extern volatile uint16_t g_batter_delay ;
 extern volatile u16 SysTickCounter;
 extern volatile u16 powerDownDelayCnt;
 //uint16_t ADCConvertedValue;	
-extern volatile u8 FLAG_1310 ;		  //¶¨Ê±Æ÷ÖĞ¶ÏÖĞÂö³å·­×ª±êÖ¾¡£
+extern volatile u8 FLAG_1310 ;		  //å®šæ—¶å™¨ä¸­æ–­ä¸­è„‰å†²ç¿»è½¬æ ‡å¿—ã€‚
 extern volatile u8 FLAG_1490 ;
 extern volatile u8 FLAG_1550 ;
 
-extern volatile u16 Timer_State ;	    //¶¨Ê±Æ÷×´Ì¬Ö¸Ê¾£¬0 = OFF, 1 = ON
+extern volatile u16 Timer_State ;	    //å®šæ—¶å™¨çŠ¶æ€æŒ‡ç¤ºï¼Œ0 = OFF, 1 = ON
 extern volatile u16 Timer_Counter ;
 
-extern volatile u16 Wavelength_Selection_state ;	 //0 = ¹Ø±Õ×´Ì¬ 1 = 1310nm 2 = 1495nm 3 = 1550nm 	4 = ºì¹â
-extern volatile u16 Operating_Mode ;	//0 = CW¡¢ 1 = PW270Hz¡¢2 = 1KHz¡¢3 = 2KHz  Á¬Ğø¹â/Âö³å¹âÑ¡Ôñ
-extern volatile int16_t Current_Power ;		//¿Éµ÷¹¦ÂÊ×´Ì¬Ö¸Ê¾±êÖ¾Î»¡£0-34¹²35¸öµÈ¼¶£¬±íÊ¾-30µ½5µÄdbmÖµ¡£
-extern volatile u8  ON_OFF_MARK ;		//¿ª¹Ø»ú±êÖ¾Î»£¬¿ª»úºóÖÃ1£¬°´¼ü°´ÏÂÖĞ¶ÏÖĞÖÃ0
-extern volatile u8  Run_Stop ;          //ÔËĞĞ£¬Í£Ö¹Ê¹ÄÜ£¬¿ªÊ¼Ê±ÏÈÊ¹ÄÜ¡£
-extern volatile u8  Keys_Shake ;		//°´¼üÖĞ¶ÏÈ¥¶¶¶¯´¦Àí£¬ÖĞ¶ÏºóÖÃ1.¡£
-extern volatile u8  Keys_Shake_Counter ;//°´¼üÈ¥¶¶¶¯SaysTick¼ÆÊıÖµ£¬¼ÆÊ±300ms£¬·ÖÎöÓ¦¸ÃÊÇÖ÷Ñ­»·µÄÊ±¼äºÍÖĞ¶Ï²Ù×÷Ê±¼ä²îµÄ¹ØÏµ
-//extern volatile u8  LCD_GetPoint_EN ;   //·ÀÖ¹´¥ÃşÆÁÖØ¸´²Ù×÷£¬Ïàµ±ÓÚ°´¼üÈ¥¶¶¶¯,¿ÉÒÔ½øĞĞ´¥ÃşÆÁ²É¼¯¡£
+extern volatile u16 Wavelength_Selection_state ;	 //0 = å…³é—­çŠ¶æ€ 1 = 1310nm 2 = 1495nm 3 = 1550nm 	4 = çº¢å…‰
+extern volatile u16 Operating_Mode ;	//0 = CWã€ 1 = PW270Hzã€2 = 1KHzã€3 = 2KHz  è¿ç»­å…‰/è„‰å†²å…‰é€‰æ‹©
+extern volatile int16_t Current_Power ;		//å¯è°ƒåŠŸç‡çŠ¶æ€æŒ‡ç¤ºæ ‡å¿—ä½ã€‚0-34å…±35ä¸ªç­‰çº§ï¼Œè¡¨ç¤º-30åˆ°5çš„dbmå€¼ã€‚
+extern volatile u8  ON_OFF_MARK ;		//å¼€å…³æœºæ ‡å¿—ä½ï¼Œå¼€æœºåç½®1ï¼ŒæŒ‰é”®æŒ‰ä¸‹ä¸­æ–­ä¸­ç½®0
+extern volatile u8  Run_Stop ;          //è¿è¡Œï¼Œåœæ­¢ä½¿èƒ½ï¼Œå¼€å§‹æ—¶å…ˆä½¿èƒ½ã€‚
+extern volatile u8  Keys_Shake ;		//æŒ‰é”®ä¸­æ–­å»æŠ–åŠ¨å¤„ç†ï¼Œä¸­æ–­åç½®1.ã€‚
+extern volatile u8  Keys_Shake_Counter ;//æŒ‰é”®å»æŠ–åŠ¨SaysTickè®¡æ•°å€¼ï¼Œè®¡æ—¶300msï¼Œåˆ†æåº”è¯¥æ˜¯ä¸»å¾ªç¯çš„æ—¶é—´å’Œä¸­æ–­æ“ä½œæ—¶é—´å·®çš„å…³ç³»
+//extern volatile u8  LCD_GetPoint_EN ;   //é˜²æ­¢è§¦æ‘¸å±é‡å¤æ“ä½œï¼Œç›¸å½“äºæŒ‰é”®å»æŠ–åŠ¨,å¯ä»¥è¿›è¡Œè§¦æ‘¸å±é‡‡é›†ã€‚
 extern volatile u8  LCD_GetPoint_Counter ;
 
-/********************FLASH²¿·Ö****************************/
-extern volatile uint16_t  Calibration_YES  ;	  //Ö÷´Ó½çÃæÇĞ»»Ê¹ÄÜ¶Ë¿Ú£¬ÏÈºó°´ÏÂ¡¶µçÔ´ µçÔ´ ²¨³¤  UP  ¶¨Ê± Ä£Ê½ down  ¡·ºóÖÃ7£¬Ê¹ÄÜ
-extern volatile uint16_t  Calibrated_Number  ; 	  //ÒÑĞ£×¼µÄ¸öÊı£¬Ğ£×¼Ö®ºó´æÈëÁÙÊ±Êı×é DAC_Data[104] µ½104¸öÖ®ºó½øĞĞĞ´FLASH²Ù×÷										  
-extern volatile uint16_t  Save_EN  ;			  //DAC_DataÊı×é´æ´¢µ±Ç°DAÖµ£¬°´¼üÖĞ¶ÏÖĞÖÃ1£¬Ö´ĞĞÍêÖ®ºóÖÃ0
+/********************FLASHéƒ¨åˆ†****************************/
+extern volatile uint16_t  Calibration_YES  ;	  //ä¸»ä»ç•Œé¢åˆ‡æ¢ä½¿èƒ½ç«¯å£ï¼Œå…ˆåæŒ‰ä¸‹ã€Šç”µæº ç”µæº æ³¢é•¿  UP  å®šæ—¶ æ¨¡å¼ down  ã€‹åç½®7ï¼Œä½¿èƒ½
+extern volatile uint16_t  Calibrated_Number  ; 	  //å·²æ ¡å‡†çš„ä¸ªæ•°ï¼Œæ ¡å‡†ä¹‹åå­˜å…¥ä¸´æ—¶æ•°ç»„ DAC_Data[104] åˆ°104ä¸ªä¹‹åè¿›è¡Œå†™FLASHæ“ä½œ										  
+extern volatile uint16_t  Save_EN  ;			  //DAC_Dataæ•°ç»„å­˜å‚¨å½“å‰DAå€¼ï¼ŒæŒ‰é”®ä¸­æ–­ä¸­ç½®1ï¼Œæ‰§è¡Œå®Œä¹‹åç½®0
 extern volatile u16 dacData ;
 extern uint16_t DAC_Data[104];
 /*********************************************************/
 
 extern volatile u8 g_onoff_en;
 /*
-µç³ØµçÁ¿²ÉÑùÍ¨µÀ
+ç”µæ± ç”µé‡é‡‡æ ·é€šé“
 */
 void ADC1_2_IRQHandler(void)
 {		
@@ -96,17 +96,17 @@ void ADC1_2_IRQHandler(void)
 #include "key.h"
 
 
-//1ms¶¨Ê±
+//1mså®šæ—¶
 extern volatile uint16_t g_delay_ms,g_adjust_ms,g_lcdbug_ms;
 extern volatile uint8_t g_keya_flag;
 extern volatile uint16_t g_ad_ms;
 /**
 * @brief  This function handles TIM5 global interrupt request.
 * @param  None
-* Ò»°ã¶¨Ê±ÓÃ£¬¶¨Ê±¹Ø»ú£¬¿ÉÒÔÉèÖÃÎª5min  £¬10min  £¬15min  £¬30min  £¬60min ×´Ì¬
-TIM2ÉèÖÃÎª100msÖÜÆÚ£¬3000 £¬ 6000  £¬ 9000  £¬ 18000 £¬  36000
+* ä¸€èˆ¬å®šæ—¶ç”¨ï¼Œå®šæ—¶å…³æœºï¼Œå¯ä»¥è®¾ç½®ä¸º5min  ï¼Œ10min  ï¼Œ15min  ï¼Œ30min  ï¼Œ60min çŠ¶æ€
+TIM2è®¾ç½®ä¸º100mså‘¨æœŸï¼Œ3000 ï¼Œ 6000  ï¼Œ 9000  ï¼Œ 18000 ï¼Œ  36000
 */
-void TIM2_IRQHandler(void)	   //1310nm¿ØÖÆ
+void TIM2_IRQHandler(void)	   //1310nmæ§åˆ¶
 {
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
 	{
@@ -136,7 +136,7 @@ void TIM2_IRQHandler(void)	   //1310nm¿ØÖÆ
 		else
 			g_key_timer_100ms = 0;
 			
-		if(Timer_State != 0)	 //µ±¶¨Ê±Æ÷´ò¿ªÊ±£¬¿ªÊ¼¶¨Ê±Æ÷¼ÆÊı
+		if(Timer_State != 0)	 //å½“å®šæ—¶å™¨æ‰“å¼€æ—¶ï¼Œå¼€å§‹å®šæ—¶å™¨è®¡æ•°
 			Timer_Counter++ ; 
 		
 // 		if(LCD_GetPoint_EN == 0)	 
@@ -168,11 +168,11 @@ void AdjustSin()
 	if(i++ >= 40) {
 		i = 0;
 	}
-	DAC_SetChannel1Data(DAC_Align_12b_R, (uint16_t)(g_sin[i] * 1500 +1500 +300));    //  £¨dacData/4096£©*3.3== OUT
+	DAC_SetChannel1Data(DAC_Align_12b_R, (uint16_t)(g_sin[i] * 1500 +1500 +300));    //  ï¼ˆdacData/4096ï¼‰*3.3== OUT
 	DAC_SoftwareTriggerCmd(DAC_Channel_1,ENABLE); 
 }
 
-void TIM3_IRQHandler(void)	   //1310nm¿ØÖÆ
+void TIM3_IRQHandler(void)	   //1310nmæ§åˆ¶
 {
 	
 	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
@@ -199,7 +199,7 @@ void TIM3_IRQHandler(void)	   //1310nm¿ØÖÆ
 * @param  None
 * @retval None
 */
-void TIM4_IRQHandler(void)	   //1490nm¿ØÖÆ
+void TIM4_IRQHandler(void)	   //1490nmæ§åˆ¶
 {
 
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET)
@@ -225,32 +225,35 @@ void TIM4_IRQHandler(void)	   //1490nm¿ØÖÆ
 * @param  None
 * @retval None
 */
-void TIM5_IRQHandler(void)	   //1550nm¿ØÖÆ
+void TIM5_IRQHandler(void)	   //1550nmæ§åˆ¶
 {
 
 	if (TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET)
 	{
-		if(FLAG_1550)
-		{
-			GPIO_ResetBits(GPIO_CTRL_PORT_C,GPIO_KEY_1550_CON);
-			//printf("\n\r 1550nm PC1 =%d\n",GPIO_ReadOutputDataBit(GPIO_CTRL_PORT_C,  GPIO_KEY_1550_CON));
-			FLAG_1550 = 0;
-		}
-		else
-		{
-			GPIO_SetBits(GPIO_CTRL_PORT_C,GPIO_KEY_1550_CON);
-			//printf("\n\r 1550nm PC1 =%d\n",GPIO_ReadOutputDataBit(GPIO_CTRL_PORT_C,  GPIO_KEY_1550_CON));
-			FLAG_1550 = 1;
-		}
+		if(g_delay_ms)
+			g_delay_ms--;
+		// if(FLAG_1550)
+		// {
+		// 	GPIO_ResetBits(GPIO_CTRL_PORT_C,GPIO_KEY_1550_CON);
+		// 	//printf("\n\r 1550nm PC1 =%d\n",GPIO_ReadOutputDataBit(GPIO_CTRL_PORT_C,  GPIO_KEY_1550_CON));
+		// 	FLAG_1550 = 0;
+		// }
+		// else
+		// {
+		// 	GPIO_SetBits(GPIO_CTRL_PORT_C,GPIO_KEY_1550_CON);
+		// 	//printf("\n\r 1550nm PC1 =%d\n",GPIO_ReadOutputDataBit(GPIO_CTRL_PORT_C,  GPIO_KEY_1550_CON));
+		// 	FLAG_1550 = 1;
+		// }
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
 	}
 }
 
-//1ms¶¨Ê±
+//1mså®šæ—¶
 extern volatile uint16_t g_delay_ms,g_adjust_ms,g_lcdbug_ms,g_usart_ms,g_lcdlisten_ms,g_debug_ms;
 extern volatile uint8_t g_keya_flag;
 extern volatile uint16_t g_ad_ms;
 extern volatile uint16_t g_touch_ms;
+volatile uint32_t g_en = 0,g_tickgui = 0;
 void TIM6_IRQHandler(void)
 {
 	#define RED_CW_HIGH 5
@@ -259,7 +262,7 @@ void TIM6_IRQHandler(void)
 	static u32 counter = 0,times = 0,redPlusTimer = 10;
 	static uint8_t noKeyCounter = 0;
 	
-	/* www.armjishu.com ARM¼¼ÊõÂÛÌ³ */
+	/* www.armjishu.com ARMæŠ€æœ¯è®ºå› */
 	if (TIM_GetITStatus(TIM6, TIM_IT_Update) != RESET)
 	{
 		TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
@@ -275,10 +278,16 @@ void TIM6_IRQHandler(void)
 			else
 				powerDownDelayCnt = 0;
 		}	
+		if (g_en && g_tickgui++ > 20) {
+			ScanKey();
+			GUI_Exec();		
+			g_tickgui = 0;
+		}
+		
 		g_ad_ms++;
 		g_adjust_ms++;
-		if(g_delay_ms)
-			g_delay_ms--;
+		// if(g_delay_ms)
+		// 	g_delay_ms--;
 		g_batter_delay++;
 		g_lcdbug_ms++;
 		g_usart_ms++;
@@ -294,7 +303,7 @@ void TIM6_IRQHandler(void)
 		//gl_key_scan();
 
 
-		//½â¾öºì¹â¿ª·ÅÒ»¶ÎÊ±¼äºó±äÈõ·½·¨£¬¸ÄÓÃ200Hz×óÓÒµÄÂö³å
+		//è§£å†³çº¢å…‰å¼€æ”¾ä¸€æ®µæ—¶é—´åå˜å¼±æ–¹æ³•ï¼Œæ”¹ç”¨200Hzå·¦å³çš„è„‰å†²
 		g_redbug_ms++;
 		if(g_redbug_ms >= redPlusTimer && g_red_mode == 1) {
 			g_redbug_ms = 0;
@@ -314,7 +323,7 @@ void TIM6_IRQHandler(void)
 		}
 		
 		
-		//³¤Ê±¼äÎŞ°´¼ü¼ì²â£¬Ã¿100ms¼ì²âÒ»´Î
+		//é•¿æ—¶é—´æ— æŒ‰é”®æ£€æµ‹ï¼Œæ¯100msæ£€æµ‹ä¸€æ¬¡
 		if(noKeyCounter++ >= 100) {
 			noKeyCounter = 0;
 			
@@ -329,8 +338,8 @@ void TIM6_IRQHandler(void)
 	}
 }
 
-/*CHECK1¡¢CHECK3¡¢CHECK4ÖĞ¶Ïº¯Êı²¿·Ö*****************************************/
-/* CHECK1ÊÖ¶¯¿ª¹Ø»úÖĞ¶Ïº¯Êı£¬ÀûÓÃÖĞ¶ÏÏìÓ¦0 */
+/*CHECK1ã€CHECK3ã€CHECK4ä¸­æ–­å‡½æ•°éƒ¨åˆ†*****************************************/
+/* CHECK1æ‰‹åŠ¨å¼€å…³æœºä¸­æ–­å‡½æ•°ï¼Œåˆ©ç”¨ä¸­æ–­å“åº”0 */
 /*void EXTI0_IRQHandler(void) 
 {
 	if(EXTI_GetITStatus(EXTI_Line0) != RESET)
@@ -351,8 +360,8 @@ void EXTI1_IRQHandler(void)
 		EXTI_ClearITPendingBit(EXTI_Line1);
 	}
 }
-/* CHECK4Ä£Ê½Ñ¡Ôñ°´¼ü¿ØÖÆ  */
-/*¹¦ÂÊµİÔö¿ØÖÆÖĞ¶Ï */
+/* CHECK4æ¨¡å¼é€‰æ‹©æŒ‰é”®æ§åˆ¶  */
+/*åŠŸç‡é€’å¢æ§åˆ¶ä¸­æ–­ */
 void EXTI2_IRQHandler(void) 
 {
 	if(EXTI_GetITStatus(EXTI_Line2) != RESET)
@@ -363,8 +372,8 @@ void EXTI2_IRQHandler(void)
 	}
 }
 
-/* ¶¨Ê±Ñ¡Ôñ°´¼ü¿ØÖÆ  */
-/* Timer_State 0 1 2 3 4 5 ¶ÔÓ¦£º OFF,  5min  £¬10min  £¬15min  £¬30min  £¬60min    */
+/* å®šæ—¶é€‰æ‹©æŒ‰é”®æ§åˆ¶  */
+/* Timer_State 0 1 2 3 4 5 å¯¹åº”ï¼š OFF,  5min  ï¼Œ10min  ï¼Œ15min  ï¼Œ30min  ï¼Œ60min    */
 void EXTI3_IRQHandler(void) 
 {
 	if(EXTI_GetITStatus(EXTI_Line3) != RESET)
@@ -374,26 +383,26 @@ void EXTI3_IRQHandler(void)
 	}
 }
 
-/* CHECK3²¨³¤Ñ¡Ôñ°´¼ü¿ØÖÆ£¬	*/
-/* 0 = ¹Ø±Õ×´Ì¬  1 = 1310nm  2 = 1495nm  3 = 1550nm  4 = ºì¹â   Wavelength_Selection_state  */
+/* CHECK3æ³¢é•¿é€‰æ‹©æŒ‰é”®æ§åˆ¶ï¼Œ	*/
+/* 0 = å…³é—­çŠ¶æ€  1 = 1310nm  2 = 1495nm  3 = 1550nm  4 = çº¢å…‰   Wavelength_Selection_state  */
 void EXTI9_5_IRQHandler(void) 
 {
-	//²¨³¤Ñ¡ÔñÖĞ¶Ï
+	//æ³¢é•¿é€‰æ‹©ä¸­æ–­
 	if(EXTI_GetITStatus(EXTI_Line5) != RESET)
 	{
-		//°´¼ü¿ØÖÆºì¹âÊä³ö
+		//æŒ‰é”®æ§åˆ¶çº¢å…‰è¾“å‡º
 		gl_key_exti(5);
 		/* Clear the EXTI Line 7  */
 		EXTI_ClearITPendingBit(EXTI_Line5);
 	}
-	//Ä£Ê½µ÷½ÚÖĞ¶Ï
+	//æ¨¡å¼è°ƒèŠ‚ä¸­æ–­
 	if(EXTI_GetITStatus(EXTI_Line7) != RESET)
 	{
 		gl_key_exti(7);
 		/* Clear the EXTI Line 5  */
 		EXTI_ClearITPendingBit(EXTI_Line7);
 	}
-	//¹¦ÂÊµİ¼õ¿ØÖÆÖĞ¶Ï¿ØÖÆ
+	//åŠŸç‡é€’å‡æ§åˆ¶ä¸­æ–­æ§åˆ¶
 	if(EXTI_GetITStatus(EXTI_Line6) != RESET)
 	{
 		gl_key_exti(6);

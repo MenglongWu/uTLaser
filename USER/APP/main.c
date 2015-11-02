@@ -653,28 +653,42 @@ void TIM4_Init(uint16_t  TIM_Period1490)
  */
 void TIM5_Init(uint16_t  TIM_Period1550)
 {
+	// TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	// /* TIM5 clock enable */
+	// RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE); 
+
+	// /* ---------------------------------------------------------------
+	// TIM4 Configuration: Output Compare Timing Mode:
+	// TIM2CLK = 36 MHz, Prescaler = 7200, TIM2 counter clock = 7.2 MHz
+	// --------------------------------------------------------------- */
+	// /* Time base configuration */
+	// TIM_TimeBaseStructure.TIM_Period		= TIM_Period1550;	//自动加载的计数值。。。
+	// TIM_TimeBaseStructure.TIM_Prescaler		= (1000 - 1);
+	// TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	// TIM_TimeBaseStructure.TIM_CounterMode	= TIM_CounterMode_Up;
+
+	// TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
+	// /* Clear TIM5 update pending flag[清除TIM5溢出中断标志] */
+	// TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
+	// /* TIM IT enable */
+	// TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);
+	// /* TIM5 enable counter */
+	// TIM_Cmd(TIM5, ENABLE);
+	// TIM_Cmd(TIM5, DISABLE);
+
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-	/* TIM5 clock enable */
+	/* TIM3 clock enable */
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE); 
-
-	/* ---------------------------------------------------------------
-	TIM4 Configuration: Output Compare Timing Mode:
-	TIM2CLK = 36 MHz, Prescaler = 7200, TIM2 counter clock = 7.2 MHz
-	--------------------------------------------------------------- */
-	/* Time base configuration */
-	TIM_TimeBaseStructure.TIM_Period		= TIM_Period1550;	//自动加载的计数值。。。
-	TIM_TimeBaseStructure.TIM_Prescaler		= (1000 - 1);
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	//时钟72M    1ms中断  向上计数
+	TIM_TimeBaseStructure.TIM_Period		= 10-1;
+	TIM_TimeBaseStructure.TIM_Prescaler		= 7200-1;
 	TIM_TimeBaseStructure.TIM_CounterMode	= TIM_CounterMode_Up;
-
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
-	/* Clear TIM5 update pending flag[清除TIM5溢出中断标志] */
+
 	TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
-	/* TIM IT enable */
-	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);
-	/* TIM5 enable counter */
+	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE); //开定时器中断
 	TIM_Cmd(TIM5, ENABLE);
-	TIM_Cmd(TIM5, DISABLE);
 }
 
 /**
@@ -742,13 +756,13 @@ void NVIC_Configuration(void)
 
 	/* Enable the TIM5 gloabal Interrupt */
 	NVIC_InitStructure.NVIC_IRQChannel					 = TIM5_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	//NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 
 	NVIC_InitStructure.NVIC_IRQChannel					 = TIM6_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -3161,7 +3175,7 @@ int32_t ScanKey()
 		return 0;
 	}
 }
-
+extern volatile uint32_t g_en ,g_tickgui ;
 extern WM_HWIN hdlg ;
 /*******************************************************************************
 * Function Name  : main
@@ -3219,6 +3233,7 @@ int main(void)
 	Function_IO_config(); 
 	// uTLaser 2015-8-31
 	Init_PWM();
+	TIM5_Init(0);
 	TIM2_Configuration();
 	TIM3_Configuration();
 	{
@@ -3251,9 +3266,9 @@ int main(void)
 	// while (1) 
 	{
 		Ctrl_LaserPower(CTRL_LASER_HV);
-		// Delay_ms(200);
+		Delay_ms(200);
 		Ctrl_LaserPower(CTRL_LASER_MV);
-		// Delay_ms(200);
+		Delay_ms(200);
 		Ctrl_LaserPower(CTRL_LASER_LV);
 		// Delay_ms(200);
 
@@ -3312,20 +3327,24 @@ int main(void)
 	//gl_text(0, 200-12, "abcdefg", -1);
 	// TestWin();
 	
+	g_en = 1;
 	TP_Init();
 	TP_EINT();
 	TP_GetADC(&pt);
 	// TC_Adj();
+	// TC_Adj();
+	// Delay_ms(1000);
 	FLASH_Configuration();
 	TC_Test();
 	
 	//while(1);
 	
+	
 	MainTask();
-
+	
 	while(1) {
-		ScanKey();
-		GUI_Exec();	
+		// ScanKey();
+		// GUI_Exec();	
 	}
 	
 	// DemoRedraw();
