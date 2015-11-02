@@ -56,7 +56,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{BUTTON_CreateIndirect,	 "1us",						GUI_ID_PWM_WIDTH,	 232,85,66,66},
 	{BUTTON_CreateIndirect,	 "Laster",						GUI_ID_LASTER,	 22,155,66,66},
 	{BUTTON_CreateIndirect,	 "Set",						GUI_ID_SETTING,	 95,155,66,66},
-	{BUTTON_CreateIndirect,	 "del",						GUI_ID_DELETE,	 162,155,136,66},
+	{BUTTON_CreateIndirect,	 "Test",						GUI_ID_DELETE,	 162,155,136,66},
 };
 
 void TurnBack(WM_HWIN	hWin)
@@ -366,6 +366,7 @@ static void _cbCallback2(WM_MESSAGE * pMsg) {
 	}
 }
 WM_HWIN hWin = 0;
+WM_HWIN hWinTest = 0;
 void OnSettingClick(WM_MESSAGE * pMsg)
 {
 	// int i;
@@ -394,11 +395,11 @@ void OnSettingClick(WM_MESSAGE * pMsg)
 }
 void OnDeleteClick(WM_MESSAGE * pMsg)
 {
-	// if (hWin) {
-	// 	GUI_EndDialog(hWin, 1);	
-	// 	hWin = 0;	
-	// }
-	
+	if (hWinTest != 0) {
+		WM_ShowWindow(hWinTest);
+		return ;
+	}
+	hWinTest = TPTestDlg_Create(pMsg->hWin);	
 }
 void Init_Ctrl(WM_MESSAGE * pMsg)
 {
@@ -498,58 +499,58 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		Id = WM_GetId(pMsg->hWinSrc);
 		NCode = pMsg->Data.v;		
 		switch(NCode) {
-	case WM_NOTIFICATION_CLICKED:
+		case WM_NOTIFICATION_CLICKED:
 
-		Id = WM_GetId(pMsg->hWinSrc);
-		WM_SetFocus(pMsg->hWinSrc);
-		switch (Id) {
-		case GUI_ID_PP:
-			OnPerPowerClick(pMsg);
+			Id = WM_GetId(pMsg->hWinSrc);
+			WM_SetFocus(pMsg->hWinSrc);
+			switch (Id) {
+			case GUI_ID_PP:
+				OnPerPowerClick(pMsg);
+				break;
+			case GUI_ID_APD:
+				OnAPDClick(pMsg);
+				break;
+			case GUI_ID_PWM:
+				OnPWMClick(pMsg);
+				break;
+			case GUI_ID_PWM_REVERSAL:
+				OnReversalClick(pMsg);
+				break;
+			case GUI_ID_PWM_WIDTH:
+				OnWidthClick(pMsg);
+				break;
+			case GUI_ID_LASTER:
+				OnLaserClick(pMsg);
+				break;
+			case GUI_ID_SETTING:
+				OnSettingClick(pMsg);
+				break;
+			case GUI_ID_DELETE:
+				OnDeleteClick(pMsg);
+				break;
+			default:
+				break;
+			}
 			break;
-		case GUI_ID_APD:
-			OnAPDClick(pMsg);
-			break;
-		case GUI_ID_PWM:
-			OnPWMClick(pMsg);
-			break;
-		case GUI_ID_PWM_REVERSAL:
-			OnReversalClick(pMsg);
-			break;
-		case GUI_ID_PWM_WIDTH:
-			OnWidthClick(pMsg);
-			break;
-		case GUI_ID_LASTER:
-			OnLaserClick(pMsg);
-			break;
-		case GUI_ID_SETTING:
-			OnSettingClick(pMsg);
-			break;
-		case GUI_ID_DELETE:
-			OnDeleteClick(pMsg);
-			break;
-		default:
-			break;
-		}
-		break;
-		hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-		BUTTON_SetText(hButton1, "Click");	
+			hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
+			BUTTON_SetText(hButton1, "Click");	
 
-		break;
-	case WM_NOTIFICATION_GOT_FOCUS:
-		hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-		BUTTON_SetTextColor(hButton1, 0, RGB(255,0,0));
-		break;
-	case WM_NOTIFICATION_LOST_FOCUS:
-		hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-		if (sg_bppdown == 0) {
+			break;
+		case WM_NOTIFICATION_GOT_FOCUS:
+			hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
+			BUTTON_SetTextColor(hButton1, 0, RGB(255,0,0));
+			break;
+		case WM_NOTIFICATION_LOST_FOCUS:
+			hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
+			if (sg_bppdown == 0) {
+				
+				BUTTON_SetTextColor(hButton1, 0, RGB(0,0,0));	
+			}
+			else {
+				BUTTON_SetTextColor(hButton1, 0, RGB(255,255,255));		
+			}
 			
-			BUTTON_SetTextColor(hButton1, 0, RGB(0,0,0));	
-		}
-		else {
-			BUTTON_SetTextColor(hButton1, 0, RGB(255,255,255));		
-		}
-		
-		break;
+			break;
 		}
 		break;
 

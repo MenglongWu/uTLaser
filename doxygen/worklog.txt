@@ -1,6 +1,7 @@
 2015-10-30: MenglongWoo
     - Change 将Delay_ms计时中断放到TIM5里，并把TIM5的中断优先级调到比TIM6高
     - Bug 存在对话框关闭漏洞，只能父窗口调用GUI_EndDialog或GUI_EndDlg关闭子窗口，不能由子窗口调用，否则程序崩溃，uCGUI没移植完毕；暂且将关闭改成隐藏窗体WM_HideWindow
+    - Add TPTestDlg 测试LCD触屏坐标效果
 
 2015-10-30: MenglongWoo
     - Add 修改ucgui窗口机制，能处理shift+tab切换控件

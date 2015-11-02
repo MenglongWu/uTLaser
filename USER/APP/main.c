@@ -784,12 +784,37 @@ void NVIC_Configuration(void)
 void FLASH_Configuration()
 {
 	uint32_t i;
+	struct point pt[] = {
+		{60,                 60},
+		{LCD_XSIZE_TFT - 60,                 60},
+		{60,                 LCD_YSIZE_TFT - 60},
+		{LCD_XSIZE_TFT - 60 ,LCD_YSIZE_TFT - 60},
+		{LCD_XSIZE_TFT / 2, LCD_YSIZE_TFT / 2},
+		{0, 0},
+	};
+	struct point adj[6];
+	
+	// return ;
 	ReadFlash(FLASH_PAGE_START, 
 		(uint32_t*)&(g_env), 
 		sizeof(struct project_env));
+
+	// 
+	// 
+	// 
+	// 
+	// 
 	if(g_env.flag != 0xaabbccdd) 
 	{
-		TC_Adj();
+		// TC_Adj();
+		adj[0].x = 2712; adj[0].y = 992;
+		adj[1].x = 2899; adj[1].y = 3304;
+		adj[2].x = 1149; adj[2].y = 868;
+		adj[3].x = 1134; adj[3].y = 3309;
+		adj[4].x = 2056; adj[4].y = 2089;
+		tp_adj(pt, adj, &g_env.adj_tp);
+
+		tp_setadj(&g_env.adj_tp);
 		tp_getadj(&g_env.adj_tp);
 
 		g_env.flag = 0xaabbccdd;
