@@ -47,8 +47,7 @@ static int event = 0;
 volatile uint16_t g_touch_ms = 0;
 #define GATE_TC (15)
 
-#define LCD_XSIZE_TFT 320
-#define LCD_YSIZE_TFT 240
+
 struct adj_tp tpadj;
 
 
@@ -148,7 +147,7 @@ void TC_Adj()
 
 			sprintf(dbgout, "%d %d %d ", pt[k].x,pt[k].y, k);
 			GUI_DispStringAt(dbgout,0,110);
-
+			printf("%d %d\r\n", adj[k-1].x, adj[k-1].y);
 			k++;
 			Delay_ms(300);
 			// while (gettouch(&adj[k-1]) == 1);

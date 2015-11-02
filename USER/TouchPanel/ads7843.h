@@ -54,7 +54,9 @@ TODO:introduce
 
 
 
-
+#define LCD_XSIZE_TFT 320
+#define LCD_YSIZE_TFT 240
+ 	
 #define TP_CS(x)	x ? GPIO_SetBits(GPIOB,GPIO_Pin_5): GPIO_ResetBits(GPIOB,GPIO_Pin_5)
 
 #define TP_INT_IN   GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_0)

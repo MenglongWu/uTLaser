@@ -1,16 +1,16 @@
 #include "key.h"
 //Function define
-//ÒÆÖ²ĞèÒªÉè¶¨°´¼ü°´ÏÂÊ±¶Ë¿ÚµÄµçÆ½Key_Signal
-//#define Key_Signal 1//ÏÂÀ­µç×èÊäÈë
-#define Key_Signal 0//ÉÏÀ­µç×èÊäÈë
+//ç§»æ¤éœ€è¦è®¾å®šæŒ‰é”®æŒ‰ä¸‹æ—¶ç«¯å£çš„ç”µå¹³Key_Signal
+//#define Key_Signal 1//ä¸‹æ‹‰ç”µé˜»è¾“å…¥
+#define Key_Signal 0//ä¸Šæ‹‰ç”µé˜»è¾“å…¥
 volatile uint16_t g_delay_ms = 0;
 
 /**
-* @brief	×èÈû·½Ê½ÑÓÊ±
-* @param	ms ÑÓÊ±µ¥Î»Îªms£¬×î³¤ÑÓÊ±65536
-* @remark ÑÓÊ±¼ÆÊıg_delay_msĞèÒª·ÅÔÚ1KHzÖĞ¶ÏÀïÃæ£¬Ã¿´ÎÖĞ¶ÏÀï¶Ôg_delay_ms¼õ1
-*			Ö±ÖÁÎª0Ê±Delay_ms·µ»Ø\n
-*			±ØĞëÔÚµ÷ÓÃDelay_msÇ°³õÊ¼»¯ÏàÓ¦ÖĞ¶Ï
+* @brief	é˜»å¡æ–¹å¼å»¶æ—¶
+* @param	ms å»¶æ—¶å•ä½ä¸ºmsï¼Œæœ€é•¿å»¶æ—¶65536
+* @remark å»¶æ—¶è®¡æ•°g_delay_mséœ€è¦æ”¾åœ¨1KHzä¸­æ–­é‡Œé¢ï¼Œæ¯æ¬¡ä¸­æ–­é‡Œå¯¹g_delay_mså‡1
+*			ç›´è‡³ä¸º0æ—¶Delay_msè¿”å›\n
+*			å¿…é¡»åœ¨è°ƒç”¨Delay_mså‰åˆå§‹åŒ–ç›¸åº”ä¸­æ–­
 */
 void Delay_ms(uint16_t ms)
 {
@@ -18,19 +18,19 @@ void Delay_ms(uint16_t ms)
 	while(g_delay_ms);
 }
 /**
-* @brief	»ñÈ¡°´¼üÊÇ³¤°´
-* @param	GPIOx °´¼ü¶Ë¿Ú×é
-* @param	kpin  ¶Ë¿ÚÒı½Å
-* @retval\n 1 ±íÊ¾°´ÏÂ\n0 ±íÊ¾Ã»°´ÏÂ
-* @remark	Èç¹û°´¼üÒ»Ö±³¤°´\n
-*			µÚ1´Îµ÷ÓÃKeyPress»áÔÚ480msºó·µ»Ø\n
-*			µÚn´Îµ÷ÓÃ»áÔÚ180msºó·µ»Ø
+* @brief	è·å–æŒ‰é”®æ˜¯é•¿æŒ‰
+* @param	GPIOx æŒ‰é”®ç«¯å£ç»„
+* @param	kpin  ç«¯å£å¼•è„š
+* @retval\n 1 è¡¨ç¤ºæŒ‰ä¸‹\n0 è¡¨ç¤ºæ²¡æŒ‰ä¸‹
+* @remark	å¦‚æœæŒ‰é”®ä¸€ç›´é•¿æŒ‰\n
+*			ç¬¬1æ¬¡è°ƒç”¨KeyPressä¼šåœ¨480msåè¿”å›\n
+*			ç¬¬næ¬¡è°ƒç”¨ä¼šåœ¨180msåè¿”å›
 */
 int8_t KeyPress(GPIO_TypeDef* GPIOx,uint16_t kpin)
 {
-	static GPIO_TypeDef *oldGPIOx = 0;//ÉÏ´Î´¦ÀíµÄ¶Ë¿Ú×é
-	static uint16_t oldkpin = 0;//ÉÏÒ»´Î´¦ÀíµÄ¶Ë¿ÚÒı½Å
-	static uint8_t secend = 0;  //µÚ¶ş¸ö×Ö·ûÏÔÊ¾±êÖ¾
+	static GPIO_TypeDef *oldGPIOx = 0;//ä¸Šæ¬¡å¤„ç†çš„ç«¯å£ç»„
+	static uint16_t oldkpin = 0;//ä¸Šä¸€æ¬¡å¤„ç†çš„ç«¯å£å¼•è„š
+	static uint8_t secend = 0;  //ç¬¬äºŒä¸ªå­—ç¬¦æ˜¾ç¤ºæ ‡å¿—
 
 	//if((GPIOx->IDR & kpin) == 0) {
 	if(GPIO_ReadInputDataBit(GPIOx,kpin) == Key_Signal) {
@@ -40,10 +40,10 @@ int8_t KeyPress(GPIO_TypeDef* GPIOx,uint16_t kpin)
 			//dprintf("Port = %x Pin = %x\n",oldGPIOx,oldkpin);
 			if(oldGPIOx == GPIOx && oldkpin == kpin) {
 				if(secend == 1) 
-					Delay_ms(480);//ÖØ¸´ÑÓÊ±£¬µÚÒ»´ÎkeydownÊÂ¼şÔÚ°´ÏÂ410msºó
+					Delay_ms(480);//é‡å¤å»¶æ—¶ï¼Œç¬¬ä¸€æ¬¡keydownäº‹ä»¶åœ¨æŒ‰ä¸‹410mså
 				else
-					//Delay_ms(220);//ÖØ¸´ËÙ¶È£¬µÚ¶ş´Î¿ªÊ¼Ã¿Ãë10´ÎkeydownÊÂ¼ş
-					Delay_ms(180);//ÖØ¸´ËÙ¶È£¬µÚ¶ş´Î¿ªÊ¼Ã¿Ãë10´ÎkeydownÊÂ¼ş
+					//Delay_ms(220);//é‡å¤é€Ÿåº¦ï¼Œç¬¬äºŒæ¬¡å¼€å§‹æ¯ç§’10æ¬¡keydownäº‹ä»¶
+					Delay_ms(180);//é‡å¤é€Ÿåº¦ï¼Œç¬¬äºŒæ¬¡å¼€å§‹æ¯ç§’10æ¬¡keydownäº‹ä»¶
 				secend = 2;
 				//if((GPIOx->IDR & kpin) != 0) {
 				if(GPIO_ReadInputDataBit(GPIOx,kpin) != Key_Signal) {
@@ -70,11 +70,11 @@ int8_t KeyPress(GPIO_TypeDef* GPIOx,uint16_t kpin)
 
 
 /**
-* @brief	ÅĞ¶Ï°´¼üÊÇ·ñ°´ÏÂ
-* @param	GPIOx °´¼ü¶Ë¿Ú×é
-* @param	kpin  ¶Ë¿ÚÒı½Å
-* @retval 0 ±íÊ¾Ã»°´ÏÂ
-* @retval 1 ±íÊ¾°´ÏÂ
+* @brief	åˆ¤æ–­æŒ‰é”®æ˜¯å¦æŒ‰ä¸‹
+* @param	GPIOx æŒ‰é”®ç«¯å£ç»„
+* @param	kpin  ç«¯å£å¼•è„š
+* @retval 0 è¡¨ç¤ºæ²¡æŒ‰ä¸‹
+* @retval 1 è¡¨ç¤ºæŒ‰ä¸‹
 */
 
 int8_t KeyDown(GPIO_TypeDef* GPIOx,uint16_t kpin)
@@ -112,12 +112,12 @@ int8_t KeyDown(GPIO_TypeDef* GPIOx,uint16_t kpin)
 }
 
 /**
-* @brief	»ñÈ¡°´¼üÊÇ·ñ°´ÏÂ
-* @param	GPIOx °´¼ü¶Ë¿Ú×é
-* @param	kpin  ¶Ë¿ÚÒı½Å
-* @retval\n	0±íÊ¾Ã»ÓĞ°´ÏÂ·ñÔò·µ»Ø°´ÏÂµÄÊ±¼ä£¨ms£©
-* @remarks ÊÇKeyDownµÄÀ©Õ¹¹¦ÄÜ£¬ÄÜ·µ»Ø¸Ã°´¼ü³¤°´µÄÊ±¼ä£¨ms£©£¬
-*		×î³¤Ê±¼äÎª500ms¡£µ±Ò»¸ö°´¼üÓĞ°´ÏÂ¡¢³¤°´Èô¸ÉSÊ±ÓÃËüÊµÏÖ
+* @brief	è·å–æŒ‰é”®æ˜¯å¦æŒ‰ä¸‹
+* @param	GPIOx æŒ‰é”®ç«¯å£ç»„
+* @param	kpin  ç«¯å£å¼•è„š
+* @retval\n	0è¡¨ç¤ºæ²¡æœ‰æŒ‰ä¸‹å¦åˆ™è¿”å›æŒ‰ä¸‹çš„æ—¶é—´ï¼ˆmsï¼‰
+* @remarks æ˜¯KeyDownçš„æ‰©å±•åŠŸèƒ½ï¼Œèƒ½è¿”å›è¯¥æŒ‰é”®é•¿æŒ‰çš„æ—¶é—´ï¼ˆmsï¼‰ï¼Œ
+*		æœ€é•¿æ—¶é—´ä¸º500msã€‚å½“ä¸€ä¸ªæŒ‰é”®æœ‰æŒ‰ä¸‹ã€é•¿æŒ‰è‹¥å¹²Sæ—¶ç”¨å®ƒå®ç°
 */
 int16_t KeyDown_Ex(GPIO_TypeDef* GPIOx,uint16_t kpin)
 {

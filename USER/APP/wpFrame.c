@@ -17,29 +17,10 @@ Purpose	 : Demonstrates a owner drawn list box
 #include "DIALOG.h"
 #include "wm.h"
 #include "project.h"
+#include "USER/TouchPanel/touch.h"
 
 
-#define RGB8(r,g,b)	 // todo
-#define RGB565(r,g,b)	 ((unsigned short) ( ((r) >> 3) << 11 ) | ( ((g) >> 2) << 5) | ( ((b) >> 3) << 0) )
-#define RGB24(r,g,b)		((unsigned long) ( (r) << 16 )		| ( (g) << 8)		| ( (b) << 0) )
 
-#define CONFIG_LCD_BPP	(24)
-// Define RGB macro
-#if CONFIG_LCD_BPP == 24
-#define RGB(r,g,b)		RGB24((r),(g),(b))
-
-#elif CONFIG_LCD_BPP == 16
-#define RGB(r,g,b)		RGB565((r),(g),(b))
-
-#elif CONFIG_LCD_BPP == 8
-#define RGB(r,g,b)		RGB8((r),(g),(b))
-
-#else
-#warning "CONFIG_LCD_BPP only with 8/16/24 check out lcdconf.h"
-#define RGB(r,g,b) RGB24((r),(g),(b))
-#endif
-
-#define RGB16(r,g,b) RGB565((r),(g),(b))
 
 static FRAMEWIN_Handle hFrame = 0;
 static BUTTON_Handle hButton1;
@@ -52,6 +33,8 @@ WM_HWIN hdlg = 0;
 #define GUI_ID_PWM_REVERSAL (GUI_ID_BUTTON0+3)
 #define GUI_ID_PWM_WIDTH (GUI_ID_BUTTON0+4)
 #define GUI_ID_LASTER (GUI_ID_BUTTON0+5)
+#define GUI_ID_SETTING (GUI_ID_BUTTON0+6)
+#define GUI_ID_DELETE (GUI_ID_BUTTON0+8)
 
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
@@ -72,8 +55,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{BUTTON_CreateIndirect,	 "PWM\r\nNormal",			GUI_ID_PWM_REVERSAL,	 162,85,66,66},
 	{BUTTON_CreateIndirect,	 "1us",						GUI_ID_PWM_WIDTH,	 232,85,66,66},
 	{BUTTON_CreateIndirect,	 "Laster",						GUI_ID_LASTER,	 22,155,66,66},
-	// {BUTTON_CreateIndirect,	 "2",						GUI_ID_BUTTON0+6,	 95,155,66,66},
-	// {BUTTON_CreateIndirect,	 "2",						GUI_ID_BUTTON0+7,	 162,155,136,66},
+	{BUTTON_CreateIndirect,	 "Set",						GUI_ID_SETTING,	 95,155,66,66},
+	{BUTTON_CreateIndirect,	 "del",						GUI_ID_DELETE,	 162,155,136,66},
 };
 
 void TurnBack(WM_HWIN	hWin)
@@ -344,6 +327,79 @@ void OnLaserClick(WM_MESSAGE * pMsg)
 		break;
 	}
 }
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreatemsg[] = {
+	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 120, 120 , FRAMEWIN_CF_MOVEABLE },
+	{BUTTON_CreateIndirect,	 "ON/OFsss",					GUI_ID_PP,	 22,15,36,36},
+};
+
+static void _cbCallback2(WM_MESSAGE * pMsg) {
+	char strout[222];
+	static GUI_RECT rect;
+	int NCode, Id;
+	static int x0,y0 = 0;
+	int x1,y1;
+	static int fpress = 0;
+	int press = 0;
+	GUI_PID_STATE state;
+
+	WM_HWIN hDlg, hListBox, hItem;
+	hDlg = pMsg->hWin;
+	hListBox = WM_GetDialogItem(hDlg, GUI_ID_MULTIEDIT0);
+
+
+	switch (pMsg->MsgId) {
+
+	case WM_INIT_DIALOG:
+		// // hButton1 = WM_GetDialogItem(pMsg->hWin, GUI_ID_BUTTON0);
+		// // BUTTON_SetText(hButton1, "dfwer");
+		// // GUI_SetFont(&GUI_Font8x10_ASCII);
+		// hFrame = WM_GetDialogItem(pMsg->hWin, 0);
+		// FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
+		// FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));
+		// FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
+		// Init_Ctrl(pMsg);
+
+		break;
+	default:
+		WM_DefaultProc(pMsg);
+	}
+}
+WM_HWIN hWin = 0;
+void OnSettingClick(WM_MESSAGE * pMsg)
+{
+	// int i;
+	// char strout[220];
+	// struct point pt;
+	if (hWin != 0) {
+		WM_ShowWindow(hWin);
+		return ;
+	}
+
+	Delay_ms(300);
+	hWin = TPAdjustDlg_Create(pMsg->hWin);
+	WM_HideWindow(pMsg->hWin);
+	// // TC_Adj();
+	// TC_Test();
+	
+	WM_ShowWindow(pMsg->hWin);
+	// WM_InvalidateWindow(pMsg->hWin);
+	// WM_SendMessage(WM_PAINT, pMsg);
+	
+	// WM_DeleteWindow(hWin);
+	printf("are you look me ? %x\r\n",hWin);
+	
+
+
+}
+void OnDeleteClick(WM_MESSAGE * pMsg)
+{
+	// if (hWin) {
+	// 	GUI_EndDialog(hWin, 1);	
+	// 	hWin = 0;	
+	// }
+	
+}
 void Init_Ctrl(WM_MESSAGE * pMsg)
 {
 	WM_HWIN hDlg;
@@ -408,6 +464,8 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		case GUI_ID_LASTER:
 			OnLaserClick(pMsg);
 			break;
+		case GUI_ID_SETTING:
+			OnSettingClick(pMsg);
 		default:
 			break;
 		}
@@ -462,6 +520,12 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 			break;
 		case GUI_ID_LASTER:
 			OnLaserClick(pMsg);
+			break;
+		case GUI_ID_SETTING:
+			OnSettingClick(pMsg);
+			break;
+		case GUI_ID_DELETE:
+			OnDeleteClick(pMsg);
 			break;
 		default:
 			break;
@@ -627,3 +691,4 @@ void MainTask()
 	WM_SetCallback(WM_HBKWIN, &_cbBkWindow);
 	hdlg = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), &_cbCallback, (WM_HWIN)WM_HBKWIN, 0, 0); 
 }
+
