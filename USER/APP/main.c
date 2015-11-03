@@ -757,19 +757,19 @@ void NVIC_Configuration(void)
 	/* Enable the TIM5 gloabal Interrupt */
 	NVIC_InitStructure.NVIC_IRQChannel					 = TIM5_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	//NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 
 	NVIC_InitStructure.NVIC_IRQChannel					 = TIM6_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	
 	NVIC_InitStructure.NVIC_IRQChannel					 = EXTI0_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 1;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
@@ -3225,6 +3225,7 @@ int main(void)
 	int touch_x, touch_y;
 	int tick = 0;
 	WM_MESSAGE msg;
+	WM_HWIN hMain;
 	USART_Configuration();
 	Init_PWM();
 	Init_LED();
@@ -3237,6 +3238,7 @@ int main(void)
 	USART_SendData(USART3, (uint8_t) 'd');
 	printf("\n\n----------------------------------------------------------------------------\n");
 	printf("        GLink TS100 Runing\n");
+
 #define SYSCLK_FREQ_72MHz
 	SystemInit();//SetSysClock();
 	
@@ -3341,7 +3343,7 @@ int main(void)
 	LCD_L0_SetPixelIndex(10, 191, RGB16(255, 0, 0));
 	LCD_L0_SetPixelIndex(10, 192, RGB16(255, 0, 0));
 	LCD_L0_SetPixelIndex(10, 193, RGB16(255, 0, 0));
-	LCD_SetPoint(100, 240, RGB16(255, 0, 0));
+	// LCD_SetPoint(100, 240, RGB16(255, 0, 0));
 	gl_setarea(10, 200, 320, 240);
 	gl_setpoint(10, 200, RGB16(255, 0, 0));
 	gl_setpoint(10, 201, RGB16(0, 255, 0));
@@ -3364,10 +3366,23 @@ int main(void)
 	
 	//while(1);
 	
+	TEXT_SetDefaultTextColor(COL_ENABLE);
+	BUTTON_GetDefaultTextColor(COL_ENABLE);
+	BUTTON_SetDefaultBkColor(COL_BUTTON_BK, 0);
+	BUTTON_SetDefaultBkColor(COL_BUTTON_BK, 1);
+	BUTTON_SetDefaultTextColor(COL_ENABLE, 0);
+	BUTTON_SetDefaultTextColor(COL_FOCUS, 1);
+	hMain = MainTask();
+
 	
-	MainTask();
+
+
 	
 	while(1) {
+		Delay_ms(1000);
+		WM_MoveTo(hMain, 0,30);
+		Delay_ms(1000);
+		WM_MoveTo(hMain, 0,0);
 		// ScanKey();
 		// GUI_Exec();	
 	}

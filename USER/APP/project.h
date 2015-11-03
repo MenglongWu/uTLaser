@@ -33,6 +33,12 @@
 #define RGB16(r,g,b) RGB565((r),(g),(b))
 
 
+#define COL_FOCUS (RGB(0,0,0))
+#define COL_ENABLE (RGB(255,255,255))
+#define COL_DISABLE (RGB(120,120,120))
+#define COL_BUTTON_BK (RGB(0,128,255))
+#define COL_DIALOG_BK (RGB(30,30,30))
+
 /*按键*/
 #define KEY_A GPIO_Pin_5
 #define KEY_B GPIO_Pin_3
