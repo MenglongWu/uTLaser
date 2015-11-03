@@ -246,7 +246,8 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 				GUI_DispStringAt("----ERROR----\nPlease adjust again!!!",LCD_XSIZE_TFT / 2 - 40, LCD_YSIZE_TFT / 2);
 			}
 			Delay_ms(2000);
-			GUI_EndDialog(this, 0);
+			// GUI_EndDialog(this, 0);
+			OnHideClick(pMsg);
 			// WM_HideWindow(this);
 		}
 	
