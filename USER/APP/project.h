@@ -52,12 +52,12 @@ struct wm_glide
 {
 	WM_HWIN hWin;
 	int en;
-	int s_x;
-	int s_y;
-	int e_x;
-	int e_y;
-	int d_x;
-	int d_y;
+	int d1_x;
+	int d1_y;
+	int d1_loop;
+	int d2_x;
+	int d2_y;
+	int d2_loop;
 };
 // ***************************************************************************
 // 激光器测试平台

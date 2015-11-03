@@ -61,6 +61,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 
 static int move = 0;
+extern struct wm_glide glide;
 static void OnLeftClick(WM_MESSAGE * pMsg)
 {
   // WM_HWIN hWin;
@@ -69,28 +70,67 @@ static void OnLeftClick(WM_MESSAGE * pMsg)
   // WM_HideWindow(this);
   // GUI_EndDialog(this,0);
   
-  if (move >= 300) {
+  if (move < -100) {
     return ;
   }
-  move += 100;
-  WM_MoveTo(hMain, move,0);
+  move -= 100;
+  glide.d1_x = -20;
+  glide.d1_y = 0;
+  glide.d1_loop = 3;
+  glide.d2_x = -2;
+  glide.d2_y = 0;
+  glide.d2_loop = 10;
+
+  glide.d1_x = -100;
+  glide.d1_loop = 1;
+  glide.d2_loop = 0;
+  
+  glide.hWin = hMain;
+  glide.en = 1;
+  // WM_MoveTo(hMain, move,0);
   // printf("kdjflsjldjfsf");
 
 }
 
 static void OnRightClick(WM_MESSAGE * pMsg)
 {
-  // WM_HWIN hWin;
-  // hWin = WM_GetDialogItem(pMsg->hWin, GUI_ID_LEFT);;
-  // BUTTON_SetText(hWin, "dddf");
-  // WM_HideWindow(this);
-  // GUI_EndDialog(this,0);
-  if (move <= 0) {
+  if (move >= 0) {
     return ;
   }
-  move -= 100;
-  WM_MoveTo(hMain, move,0);
+  move += 100;
 
+  glide.d1_x = 20;
+  glide.d1_y = 0;
+  glide.d1_loop = 3;
+  glide.d2_x = 2;
+  glide.d2_y = 0;
+  glide.d2_loop = 10;
+
+
+  glide.d1_x = 100;
+  glide.d1_loop = 1;
+  glide.d2_loop = 0;
+
+  glide.hWin = hMain;
+  glide.en = 1;
+  // WM_MoveTo(hMain, move,0);
+
+}
+static void Init_Ctrl(WM_MESSAGE * pMsg)
+{
+  WM_HWIN hDlg,hButton;
+  WM_MESSAGE msg;
+
+  hDlg = pMsg->hWin;
+  hButton = WM_GetDialogItem(hDlg, GUI_ID_LEFT);
+  BUTTON_SetTextColor(hButton, 1, COL_DISABLE);
+  BUTTON_SetBkColor(hButton, 1, COL_DIALOG_BK);
+  BUTTON_SetBkColor(hButton, 0, COL_DIALOG_BK);
+
+  hButton = WM_GetDialogItem(hDlg, GUI_ID_RIGHT);
+  BUTTON_SetBkColor(hButton, 1, COL_DIALOG_BK);
+  BUTTON_SetBkColor(hButton, 0, COL_DIALOG_BK);
+  BUTTON_SetTextColor(hButton, 1, COL_DISABLE);
 }
 /*********************************************************************
 *
@@ -108,13 +148,11 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
   switch (pMsg->MsgId) {
   case WM_INIT_DIALOG:
 
-    // BUTTON_SetText(hButton1, "dfwer");
-    // GUI_SetFont(&GUI_Font8x10_ASCII);
     FRAMEWIN_AddCloseButton(pMsg->hWin, FRAMEWIN_BUTTON_RIGHT, 0);
     FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
-    FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));//COL_DIALOG_BK);
+    FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
     FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
-    // Init_Ctrl(pMsg);
+    Init_Ctrl(pMsg);
   // case WM_TOUCH:
     
   //   if (getlogxy(&touch)) {

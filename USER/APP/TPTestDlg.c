@@ -26,6 +26,8 @@ static FRAMEWIN_Handle hFrame = 0;
 static BUTTON_Handle hButton1;
 static BUTTON_Handle hButton2;
 static WM_HWIN this = 0;
+static WM_HWIN parent = 0;
+
 
 #define GUI_ID_RAW (GUI_ID_BUTTON0+0)
 #define GUI_ID_LOGIC (GUI_ID_BUTTON0+1)
@@ -66,6 +68,7 @@ static void OnHideClick(WM_MESSAGE * pMsg)
 	// hWin = WM_GetDialogItem(pMsg->hWin, GUI_ID_CLOSE);;
 	// BUTTON_SetText(hWin, "dddf");
 	// WM_HideWindow(this);
+	WM_ShowWindow(parent);
 	GUI_EndDialog(this,0);
 	// printf("kdjflsjldjfsf");
 
@@ -100,6 +103,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
 		FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
 		FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
+		// WM_MoveTo(this, 0, 0);
 		// Init_Ctrl(pMsg);
 	case WM_TOUCH:
 		
@@ -156,7 +160,8 @@ WM_HWIN TPTestDlg_Create(WM_HWIN hParent)
 {
 	// FRAMEWIN_SetTitleVis(hFrame, 0);
 	// WM_SetCallback(WM_HBKWIN, &_cbBkWindow);
-	this = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), &_cbCallback, (WM_HWIN)hParent, 0, 0); 
+	parent = hParent;
+	this = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), &_cbCallback, (WM_HWIN)0, 0, 0); 
 	return this;
 }
 

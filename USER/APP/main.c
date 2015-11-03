@@ -3200,6 +3200,8 @@ int32_t ScanKey()
 		return 0;
 	}
 }
+
+struct wm_glide glide;
 extern volatile uint32_t g_en ,g_tickgui ;
 extern WM_HWIN hdlg ;
 /*******************************************************************************
@@ -3214,6 +3216,7 @@ extern WM_HWIN hdlg ;
 extern WM_HWIN hdlg ;
 int main(void)
 {
+	int index_move;
 	GUI_RECT rect;
 	int fpress = 0;
 	int press = 0;
@@ -3375,12 +3378,33 @@ int main(void)
 	hMain = MainTask();
 
 	hleft = DestopBtn_Create(WM_HBKWIN, hMain);
-	WM_BringToBottom(hMain);
-	WM_BringToTop(hleft);
+	// WM_BringToBottom(hMain);
+	// WM_BringToTop(hleft);
 
 
 	
 	while(1) {
+		if (glide.en == 1) {
+			// while(glide.s_x != glide.e_x) {
+			// 	glide.s_x += glide.d_x;
+			// 	glide.s_y += glide.d_y;
+				// WM_MoveTo(hMain, glide.s_x,0);
+			while(glide.d1_loop > 0) {
+				WM_MoveWindow(hMain, glide.d1_x, glide.d1_y);
+				printf("%d \n", glide.d1_loop);
+				glide.d1_loop--;
+				Delay_ms(30);
+			}
+			while(glide.d2_loop > 0) {
+				WM_MoveWindow(hMain, glide.d2_x, glide.d2_y);
+				printf("%d \n", glide.d2_loop);
+				glide.d2_loop--;
+				Delay_ms(10);
+
+			}
+			
+			glide.en = 0;
+		}
 		// Delay_ms(1000);
 		// WM_MoveTo(hMain, 0,30);
 		// Delay_ms(1000);

@@ -1,4 +1,14 @@
-2015-10-30: MenglongWoo
+2015-11-3: MenglongWoo
+    - Add 添加BUTTON位图
+    - Add DesktopBtn 移动主窗口
+    - Fix 子窗体能调用GUI_EndDialog退出，之前存在的漏洞应该补上了，估计是我现在修改了中断的优先级，TIM5 > TIM6
+        + TIM5 做tick计时，Delay_ms用
+        + TIM6 按键扫描、GUI_Exec、检测触屏
+    - Stele 仿WP桌面完成
+        + 移动方式在主程序里死循环等待移动，因为在消息循环里面移动没有过程效果，手动调用GUI_Exec强制重绘程序会崩溃
+        + uCGUI没有z次序（网上说有的）子窗体显示后父窗体主动隐藏，子窗体退出后将父窗体显示，这里的父窗体是桌面防WP界面
+
+2015-11-2: MenglongWoo
     - Change 将Delay_ms计时中断放到TIM5里，并把TIM5的中断优先级调到比TIM6高
     - Bug 存在对话框关闭漏洞，只能父窗口调用GUI_EndDialog或GUI_EndDlg关闭子窗口，不能由子窗口调用，否则程序崩溃，uCGUI没移植完毕；暂且将关闭改成隐藏窗体WM_HideWindow
     - Add TPTestDlg 测试LCD触屏坐标效果

@@ -554,12 +554,12 @@ void OnSettingClick(WM_MESSAGE * pMsg)
 
 	Delay_ms(300);
 	WM_HideWindow(pMsg->hWin);
-	hWin = TPAdjustDlg_Create(0);//pMsg->hWin);
+	hWin = TPAdjustDlg_Create(pMsg->hWin);
 	
 	// // TC_Adj();
 	// TC_Test();
 	
-	WM_ShowWindow(pMsg->hWin);
+	// WM_ShowWindow(pMsg->hWin);
 	// WM_InvalidateWindow(pMsg->hWin);
 	// WM_SendMessage(WM_PAINT, pMsg);
 	
@@ -575,12 +575,12 @@ void OnDeleteClick(WM_MESSAGE * pMsg)
 	// 	WM_ShowWindow(hWinTest);
 	// 	return ;
 	// }
-	WM_HideWindow(pMsg->hWin);	
-	hWinTest = TPTestDlg_Create(0);
-	
-	WM_ShowWindow(pMsg->hWin);	
+	WM_HideWindow(pMsg->hWin);
+	hWinTest = TPTestDlg_Create(pMsg->hWin);
+	WM_BringToTop(hWinTest);
+	// WM_ShowWindow(pMsg->hWin);	
 }
-void Init_Ctrl(WM_MESSAGE * pMsg)
+static void Init_Ctrl(WM_MESSAGE * pMsg)
 {
 	int i;
 	WM_HWIN hDlg,hButton;
