@@ -227,23 +227,15 @@ void TIM4_IRQHandler(void)	   //1490nm控制
 */
 void TIM5_IRQHandler(void)	   //1550nm控制
 {
-
+	static int k = 0;
 	if (TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET)
 	{
 		if(g_delay_ms)
 			g_delay_ms--;
-		// if(FLAG_1550)
-		// {
-		// 	GPIO_ResetBits(GPIO_CTRL_PORT_C,GPIO_KEY_1550_CON);
-		// 	//printf("\n\r 1550nm PC1 =%d\n",GPIO_ReadOutputDataBit(GPIO_CTRL_PORT_C,  GPIO_KEY_1550_CON));
-		// 	FLAG_1550 = 0;
-		// }
-		// else
-		// {
-		// 	GPIO_SetBits(GPIO_CTRL_PORT_C,GPIO_KEY_1550_CON);
-		// 	//printf("\n\r 1550nm PC1 =%d\n",GPIO_ReadOutputDataBit(GPIO_CTRL_PORT_C,  GPIO_KEY_1550_CON));
-		// 	FLAG_1550 = 1;
-		// }
+		if (k++ >= 1000) {
+			printf("tim5 1000%d\n", k);
+			k = 0;
+		}
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
 	}
 }
@@ -261,13 +253,16 @@ void TIM6_IRQHandler(void)
 	
 	static u32 counter = 0,times = 0,redPlusTimer = 10;
 	static uint8_t noKeyCounter = 0;
-	
+	static int k = 0;
 	/* www.armjishu.com ARM技术论坛 */
 	if (TIM_GetITStatus(TIM6, TIM_IT_Update) != RESET)
 	{
 		TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
 		
-		
+		if (k++ >= 1000) {
+			printf("tim6 1000%d\n", k);
+			k = 0;
+		}
 		if(g_onoff_en == 0 ) {
 			if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_1)==0)
 				g_onoff_en = 1;

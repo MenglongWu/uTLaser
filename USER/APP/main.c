@@ -3225,7 +3225,7 @@ int main(void)
 	int touch_x, touch_y;
 	int tick = 0;
 	WM_MESSAGE msg;
-	WM_HWIN hMain;
+	WM_HWIN hMain, hleft,hright;
 	USART_Configuration();
 	Init_PWM();
 	Init_LED();
@@ -3374,15 +3374,17 @@ int main(void)
 	BUTTON_SetDefaultTextColor(COL_FOCUS, 1);
 	hMain = MainTask();
 
-	
+	hleft = DestopBtn_Create(WM_HBKWIN, hMain);
+	WM_BringToBottom(hMain);
+	WM_BringToTop(hleft);
 
 
 	
 	while(1) {
-		Delay_ms(1000);
-		WM_MoveTo(hMain, 0,30);
-		Delay_ms(1000);
-		WM_MoveTo(hMain, 0,0);
+		// Delay_ms(1000);
+		// WM_MoveTo(hMain, 0,30);
+		// Delay_ms(1000);
+		// WM_MoveTo(hMain, 0,0);
 		// ScanKey();
 		// GUI_Exec();	
 	}

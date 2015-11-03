@@ -34,17 +34,11 @@ static WM_HWIN this = 0;
 #define GUI_ID_PWM_WIDTH (GUI_ID_BUTTON0+4)
 #define GUI_ID_LASTER (GUI_ID_BUTTON0+5)
 #define GUI_ID_SETTING (GUI_ID_BUTTON0+6)
-
+#define GUI_ID_CLOSE (GUI_ID_BUTTON0+2)
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320, 240 , FRAMEWIN_CF_MOVEABLE },
-		 // { LISTBOX_CreateIndirect,	 0,						 GUI_ID_MULTIEDIT0,	10,	10, 100, 100, 0, 100 },
-	// /* Check box for multi select mode */
-	//	 { CHECKBOX_CreateIndirect,	0,						 GUI_ID_CHECK0,	 120,	10,	 0,	 0 },
-	//	 { TEXT_CreateIndirect,		"Multi select",			0,				 140,	10,	80,	15, TEXT_CF_LEFT },
-	// /* Check box for owner drawn list box */
-	//	 { CHECKBOX_CreateIndirect,	0,						 GUI_ID_CHECK1,	 120,	35,	 0,	 0 },
-	//	 { TEXT_CreateIndirect,		"Owner drawn",				0,				140,	35,	80,	15, TEXT_CF_LEFT },
+	{BUTTON_CreateIndirect,	 "CLOSE",						GUI_ID_CLOSE,	 0,0,50,20},
 	// /* Buttons */
 	//	 { BUTTON_CreateIndirect,	"OK",						GUI_ID_OK,		 120,	65,	80,	20 },
 	//	 { BUTTON_CreateIndirect,	"Cancel",					GUI_ID_CANCEL,	 120,	90,	80,	20 },
@@ -94,6 +88,16 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 // 		WM_DefaultProc(pMsg);
 // 	}
 // }
+static void OnHideClick(WM_MESSAGE * pMsg)
+{
+	// WM_HWIN hWin;
+	// hWin = WM_GetDialogItem(pMsg->hWin, GUI_ID_CLOSE);;
+	// BUTTON_SetText(hWin, "dddf");
+	// WM_HideWindow(this);
+	GUI_EndDialog(this,0);
+	// printf("kdjflsjldjfsf");
+
+}
 
 int IsGood(int a, int b, int dt)
 {
@@ -176,7 +180,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		// FRAMEWIN_AddCloseButton(pMsg->hWin, FRAMEWIN_BUTTON_RIGHT, 0);
 		// hFrame = WM_GetDialogItem(pMsg->hWin, 0);
 		FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
-		FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));
+		FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
 		FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
 		// Init_Ctrl(pMsg);
 	case WM_TOUCH:
@@ -240,11 +244,34 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 				GUI_DispStringAt("----ERROR----\nPlease adjust again!!!",LCD_XSIZE_TFT / 2 - 40, LCD_YSIZE_TFT / 2);
 			}
 			Delay_ms(2000);
-			WM_HideWindow(this);
+			GUI_EndDialog(this, 0);
+			// WM_HideWindow(this);
 		}
 	
 		break;
-	
+	case WM_KEY:
+		Id = WM_GetId(pMsg->hWinSrc);
+
+		switch (Id) {
+		case GUI_ID_CLOSE:
+			OnHideClick(pMsg);
+			break;
+		}
+		break;
+	case WM_NOTIFY_PARENT:
+		NCode = pMsg->Data.v;		
+		switch(NCode) {
+		case WM_NOTIFICATION_CLICKED:
+			Id = WM_GetId(pMsg->hWinSrc);
+			WM_SetFocus(pMsg->hWinSrc);
+			switch (Id) {
+			case GUI_ID_CLOSE:
+				OnHideClick(pMsg);
+				break;
+			}
+			break;
+		}
+		break;
 	default:
 		WM_DefaultProc(pMsg);
 	}

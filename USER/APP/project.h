@@ -2,7 +2,7 @@
 #define _PROJECT_H_
 #include "stm32f10x_tim.h" 
 #include "USER/TouchPanel/ads7843.h"
-
+#include "WM.h"
 //屏蔽警告
 #pragma diag_suppress 167
 #pragma diag_suppress 174
@@ -48,6 +48,17 @@
 #define KEY_Z GPIO_Pin_6
 
 
+struct wm_glide
+{
+	WM_HWIN hWin;
+	int en;
+	int s_x;
+	int s_y;
+	int e_x;
+	int e_y;
+	int d_x;
+	int d_y;
+};
 // ***************************************************************************
 // 激光器测试平台
 #define CTRL_LASER_LV 0

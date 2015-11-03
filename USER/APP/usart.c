@@ -364,11 +364,14 @@ PUTCHAR_PROTOTYPE
 {
 	/* Place your implementation of fputc here */
 	/* e.g. write a character to the USART */
+	if (ch == '\n') {
+		USART_SendData(comSelect, (uint8_t) '\r');	
+		while (USART_GetFlagStatus(comSelect, USART_FLAG_TC) == RESET);
+	}
 	USART_SendData(comSelect, (uint8_t) ch);
 
 	/* Loop until the end of transmission */
-	while (USART_GetFlagStatus(comSelect, USART_FLAG_TC) == RESET)
-	{}
+	while (USART_GetFlagStatus(comSelect, USART_FLAG_TC) == RESET);
 
 	return ch;
 }

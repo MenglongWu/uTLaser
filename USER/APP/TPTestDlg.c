@@ -65,7 +65,8 @@ static void OnHideClick(WM_MESSAGE * pMsg)
 	// WM_HWIN hWin;
 	// hWin = WM_GetDialogItem(pMsg->hWin, GUI_ID_CLOSE);;
 	// BUTTON_SetText(hWin, "dddf");
-	WM_HideWindow(this);
+	// WM_HideWindow(this);
+	GUI_EndDialog(this,0);
 	// printf("kdjflsjldjfsf");
 
 }
@@ -92,13 +93,12 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 	// printf("%x %x %x\n", pMsg->MsgId, pMsg->hWin,pMsg->hWinSrc);
 	switch (pMsg->MsgId) {
 	case WM_INIT_DIALOG:
-		// hButton1 = WM_GetDialogItem(pMsg->hWin, GUI_ID_BUTTON0);
+
 		// BUTTON_SetText(hButton1, "dfwer");
 		// GUI_SetFont(&GUI_Font8x10_ASCII);
 		FRAMEWIN_AddCloseButton(pMsg->hWin, FRAMEWIN_BUTTON_RIGHT, 0);
-		// hFrame = WM_GetDialogItem(pMsg->hWin, 0);
 		FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
-		FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));
+		FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
 		FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
 		// Init_Ctrl(pMsg);
 	case WM_TOUCH:
@@ -119,6 +119,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 	case WM_PAINT:
 		for (i = 0; i < sizeof(pt)/ sizeof(struct point); i++) {
 			GUI_FillRect(pt[i].x, pt[i].y, pt[i].x + 2, pt[i].y + 2);
+
 		}
 		
 		break;

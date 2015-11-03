@@ -197,7 +197,7 @@ static WM_HWIN this = 0;
 
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320, 240 , FRAMEWIN_CF_MOVEABLE },
+	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320, 220 , FRAMEWIN_CF_MOVEABLE },
 	//	 { LISTBOX_CreateIndirect,	 0,						 GUI_ID_MULTIEDIT0,	10,	10, 100, 100, 0, 100 },
 	// /* Check box for multi select mode */
 	//	 { CHECKBOX_CreateIndirect,	0,						 GUI_ID_CHECK0,	 120,	10,	 0,	 0 },
@@ -553,8 +553,9 @@ void OnSettingClick(WM_MESSAGE * pMsg)
 	// }
 
 	Delay_ms(300);
-	hWin = TPAdjustDlg_Create(pMsg->hWin);
 	WM_HideWindow(pMsg->hWin);
+	hWin = TPAdjustDlg_Create(0);//pMsg->hWin);
+	
 	// // TC_Adj();
 	// TC_Test();
 	
@@ -574,7 +575,10 @@ void OnDeleteClick(WM_MESSAGE * pMsg)
 	// 	WM_ShowWindow(hWinTest);
 	// 	return ;
 	// }
-	hWinTest = TPTestDlg_Create(pMsg->hWin);	
+	WM_HideWindow(pMsg->hWin);	
+	hWinTest = TPTestDlg_Create(0);
+	
+	WM_ShowWindow(pMsg->hWin);	
 }
 void Init_Ctrl(WM_MESSAGE * pMsg)
 {
