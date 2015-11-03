@@ -211,11 +211,12 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{BUTTON_CreateIndirect,	 "",					GUI_ID_PP,	 22,15 - 7,136,136},
 	{BUTTON_CreateIndirect,	 "APD",						GUI_ID_APD,	 162,15 - 7,66,66},
 	{BUTTON_CreateIndirect,	 "PWM",						GUI_ID_PWM,	 232,15 - 7,66,66},
-	{BUTTON_CreateIndirect,	 "PWM\r\nNormal",			GUI_ID_PWM_REVERSAL,	 162,85 - 7,66,66},
-	{BUTTON_CreateIndirect,	 "1us",						GUI_ID_PWM_WIDTH,	 232,85 - 7,66,66},
-	{BUTTON_CreateIndirect,	 "Laster",						GUI_ID_LASTER,	 22,155 - 7,66,66},
-	{BUTTON_CreateIndirect,	 "Set",						GUI_ID_SETTING,	 92,155 - 7,66,66},
-	{BUTTON_CreateIndirect,	 "Test",						GUI_ID_DELETE,	 162,155 - 7,136,66},
+	// {BUTTON_CreateIndirect,	 "PWM\r\nNormal",			GUI_ID_PWM_REVERSAL,	 162,85 - 7,66,66},
+	{BUTTON_CreateIndirect,   "1us",           GUI_ID_PWM_WIDTH,  162,85 - 7,66,66},
+  {BUTTON_CreateIndirect,  "Laster",            GUI_ID_LASTER,   232,85 - 7,66,66},
+  {BUTTON_CreateIndirect,  "Set",           GUI_ID_SETTING,  22,155 - 7,66,66},
+  {BUTTON_CreateIndirect,  "Test",            GUI_ID_DELETE,   92,155 - 7,66,66},
+	// {BUTTON_CreateIndirect,	 "Test",						GUI_ID_DELETE,	 162,155 - 7,136,66},
 };
 
 void TurnBack(WM_HWIN	hWin)
@@ -555,7 +556,7 @@ void OnSettingClick(WM_MESSAGE * pMsg)
 	Delay_ms(300);
 	WM_HideWindow(pMsg->hWin);
 	hWin = TPAdjustDlg_Create(pMsg->hWin);
-	
+	// WM_BringToTop(hWin);
 	// // TC_Adj();
 	// TC_Test();
 	
@@ -577,7 +578,7 @@ void OnDeleteClick(WM_MESSAGE * pMsg)
 	// }
 	WM_HideWindow(pMsg->hWin);
 	hWinTest = TPTestDlg_Create(pMsg->hWin);
-	WM_BringToTop(hWinTest);
+	// WM_BringToTop(hWinTest);
 	// WM_ShowWindow(pMsg->hWin);	
 }
 static void Init_Ctrl(WM_MESSAGE * pMsg)

@@ -105,6 +105,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
 		// WM_MoveTo(this, 0, 0);
 		// Init_Ctrl(pMsg);
+		break;
 	case WM_TOUCH:
 		
 		if (getlogxy(&touch)) {
