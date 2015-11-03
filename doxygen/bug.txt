@@ -1,0 +1,16 @@
+
+/*! \page commit-20xx-xx-xx brief
+	intruction
+	\code {.cpp}
+	add code
+	\endcode
+*/
+
+/*! \page Bug-2051103-1 Bug-2051103-1-C : 
+	屏幕校准后再次进入校准界面，程序崩溃
+	
+	处理方式
+
+	依旧不能再WM_PAINT里面GUI_EndDialog当前窗口
+*/
+

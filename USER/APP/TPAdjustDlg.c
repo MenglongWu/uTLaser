@@ -184,6 +184,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
 		FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
 		FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
+		index = 0;
 		// Init_Ctrl(pMsg);
 	case WM_TOUCH:
 		{
@@ -227,7 +228,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		printf("index = %d\r\n", index);
 		
 		if (index >= 5) {
-			index = 0;
+			index = 5;
 			// WM_DeleteWindow(this);
 			// GUI_EndDialog(this, 1);
 			if (CheckAdj(adj) ) {
@@ -245,9 +246,9 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 			else {
 				GUI_DispStringAt("----ERROR----\nPlease adjust again!!!",LCD_XSIZE_TFT / 2 - 40, LCD_YSIZE_TFT / 2);
 			}
-			Delay_ms(2000);
+			// Delay_ms(2000);
 			// GUI_EndDialog(this, 0);
-			OnHideClick(pMsg);
+			// OnHideClick(pMsg);
 			// WM_HideWindow(this);
 		}
 	
