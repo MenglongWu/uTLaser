@@ -53,9 +53,13 @@ int GUI_Exec1(void) {
 */
 int GUI_Exec(void) {
   int r = 0;
+  static int i = 0;
+
+  while (i == 1);
   while (GUI_Exec1()) {
     r = 1;                  /* We have done something */
   }
+  i = 0;
   return r;
 }
 

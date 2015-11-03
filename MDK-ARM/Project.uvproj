@@ -440,6 +440,21 @@
               <FileType>1</FileType>
               <FilePath>..\USER\APP\wpFrame.c</FilePath>
             </File>
+            <File>
+              <FileName>TPTestDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPTestDlg.c</FilePath>
+            </File>
+            <File>
+              <FileName>DestopBtn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\DestopBtn.c</FilePath>
+            </File>
+            <File>
+              <FileName>TPAdjustDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPAdjustDlg.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4563,6 +4578,21 @@
               <FileType>1</FileType>
               <FilePath>..\USER\APP\wpFrame.c</FilePath>
             </File>
+            <File>
+              <FileName>TPTestDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPTestDlg.c</FilePath>
+            </File>
+            <File>
+              <FileName>DestopBtn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\DestopBtn.c</FilePath>
+            </File>
+            <File>
+              <FileName>TPAdjustDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPAdjustDlg.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -8685,6 +8715,21 @@
               <FileName>wpFrame.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\APP\wpFrame.c</FilePath>
+            </File>
+            <File>
+              <FileName>TPTestDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPTestDlg.c</FilePath>
+            </File>
+            <File>
+              <FileName>DestopBtn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\DestopBtn.c</FilePath>
+            </File>
+            <File>
+              <FileName>TPAdjustDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPAdjustDlg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -12849,6 +12894,21 @@
               <FileType>1</FileType>
               <FilePath>..\USER\APP\wpFrame.c</FilePath>
             </File>
+            <File>
+              <FileName>TPTestDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPTestDlg.c</FilePath>
+            </File>
+            <File>
+              <FileName>DestopBtn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\DestopBtn.c</FilePath>
+            </File>
+            <File>
+              <FileName>TPAdjustDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPAdjustDlg.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -17011,6 +17071,21 @@
               <FileName>wpFrame.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\APP\wpFrame.c</FilePath>
+            </File>
+            <File>
+              <FileName>TPTestDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPTestDlg.c</FilePath>
+            </File>
+            <File>
+              <FileName>DestopBtn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\DestopBtn.c</FilePath>
+            </File>
+            <File>
+              <FileName>TPAdjustDlg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\TPAdjustDlg.c</FilePath>
             </File>
           </Files>
         </Group>

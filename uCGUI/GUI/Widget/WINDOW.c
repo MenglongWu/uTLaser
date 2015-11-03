@@ -124,6 +124,9 @@ static void _cb(WM_MESSAGE* pMsg) {
       case GUI_KEY_TAB:
         pObj->hFocussedChild = WM_SetFocusOnNextChild(hObj);
         break;                    /* Send to parent by not doing anything */
+      case GUI_KEY_SHIFT_TAG:
+        pObj->hFocussedChild = WM_SetFocusOnPrevChild(hObj);
+        return;
       }
     }
     break;

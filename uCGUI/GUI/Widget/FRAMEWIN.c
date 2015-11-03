@@ -376,6 +376,9 @@ static void FRAMEWIN__cbClient(WM_MESSAGE* pMsg) {
       case GUI_KEY_TAB:
         pObj->hFocussedChild = WM_SetFocusOnNextChild(hWin);
         return;
+      case GUI_KEY_SHIFT_TAG:
+        pObj->hFocussedChild = WM_SetFocusOnPrevChild(hWin);
+        return;
       }
     }
     break;	                       /* Send to parent by not doing anything */

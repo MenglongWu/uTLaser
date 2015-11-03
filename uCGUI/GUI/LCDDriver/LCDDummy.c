@@ -596,13 +596,15 @@ void GUI_X_Delay(int Period)
 }
 
 /**** Multitask routines - required only if multitasking is used (#define GUI_OS 1) ****/
+static int lock = 0;
 void GUI_X_Unlock(void)
 {
-
+  lock = 0;
 }
 void GUI_X_Lock(void)
 {
-
+  while(lock == 1);
+  lock = 1;
 }
 U32  GUI_X_GetTaskId(void)
 {

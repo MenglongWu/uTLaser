@@ -17,34 +17,174 @@ Purpose	 : Demonstrates a owner drawn list box
 #include "DIALOG.h"
 #include "wm.h"
 #include "project.h"
+#include "USER/TouchPanel/touch.h"
 
 
-#define RGB8(r,g,b)	 // todo
-#define RGB565(r,g,b)	 ((unsigned short) ( ((r) >> 3) << 11 ) | ( ((g) >> 2) << 5) | ( ((b) >> 3) << 0) )
-#define RGB24(r,g,b)		((unsigned long) ( (r) << 16 )		| ( (g) << 8)		| ( (b) << 0) )
 
-#define CONFIG_LCD_BPP	(24)
-// Define RGB macro
-#if CONFIG_LCD_BPP == 24
-#define RGB(r,g,b)		RGB24((r),(g),(b))
+static const GUI_COLOR Colors[] = { 0x000000, 0xFFFFFF };
+static const GUI_LOGPALETTE Palette = { 2, 1, Colors };
 
-#elif CONFIG_LCD_BPP == 16
-#define RGB(r,g,b)		RGB565((r),(g),(b))
+/*   Palette
+The following are the entries of the palette table.
+Every entry is a 32-bit value (of which 24 bits are actually used)
+the lower   8 bits represent the Red component,
+the middle  8 bits represent the Green component,
+the highest 8 bits (of the 24 bits used) represent the Blue component
+as follows:   0xBBGGRR
+*/
 
-#elif CONFIG_LCD_BPP == 8
-#define RGB(r,g,b)		RGB8((r),(g),(b))
+const GUI_COLOR ColorsOFF[] = {
+     0x000000,0xFFFFFF
+};
 
-#else
-#warning "CONFIG_LCD_BPP only with 8/16/24 check out lcdconf.h"
-#define RGB(r,g,b) RGB24((r),(g),(b))
-#endif
+const GUI_LOGPALETTE PalOFF = {
+  2,	/* number of entries */
+  0, 	/* No transparency */
+  &ColorsOFF[0]
+};
 
-#define RGB16(r,g,b) RGB565((r),(g),(b))
+const unsigned char acOFF[] = {
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ____XXXX, XXXX____, ________, XXXXXXXX, XXXXXX__, _XXXXXXX, XXXXXXX_,
+  ________, __XXXXXX, XXXXXXX_, ________, XXXXXXXX, XXXXXX__, _XXXXXXX, XXXXXXX_,
+  ________, XXXXXXXX, XXXXXXXX, ________, XXXXXXXX, XXXXXX__, _XXXXXXX, XXXXXXX_,
+  _______X, XXXXX___, ___XXXXX, X_______, XXXX____, ________, _XXXX___, ________,
+  ______XX, XXX_____, _____XXX, XX______, XXXX____, ________, _XXXX___, ________,
+  _____XXX, XX______, ______XX, XXX_____, XXXX____, ________, _XXXX___, ________,
+  _____XXX, X_______, _______X, XXX_____, XXXX____, ________, _XXXX___, ________,
+  ____XXXX, X_______, ________, XXXX____, XXXX____, ________, _XXXX___, ________,
+  ____XXXX, ________, ________, XXXX____, XXXX____, ________, _XXXX___, ________,
+  ____XXXX, ________, ________, XXXXX___, XXXX____, ________, _XXXX___, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, ________, _XXXX___, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, ________, _XXXX___, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, ________, _XXXX___, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXXXXXX, XXXXX___, _XXXXXXX, XXXXXX__,
+  ___XXXX_, ________, ________, _XXXX___, XXXXXXXX, XXXXX___, _XXXXXXX, XXXXXX__,
+  ___XXXX_, ________, ________, _XXXX___, XXXXXXXX, XXXXX___, _XXXXXXX, XXXXXX__,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, ________, _XXXX___, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, ________, _XXXX___, ________,
+  ___XXXXX, ________, ________, XXXX____, XXXX____, ________, _XXXX___, ________,
+  ____XXXX, ________, ________, XXXX____, XXXX____, ________, _XXXX___, ________,
+  ____XXXX, ________, ________, XXXX____, XXXX____, ________, _XXXX___, ________,
+  _____XXX, X_______, _______X, XXX_____, XXXX____, ________, _XXXX___, ________,
+  _____XXX, XX______, ______XX, XXX_____, XXXX____, ________, _XXXX___, ________,
+  ______XX, XXX_____, _____XXX, XX______, XXXX____, ________, _XXXX___, ________,
+  _______X, XXXXX___, ___XXXXX, X_______, XXXX____, ________, _XXXX___, ________,
+  ________, XXXXXXXX, XXXXXXXX, ________, XXXX____, ________, _XXXX___, ________,
+  ________, _XXXXXXX, XXXXXX__, ________, XXXX____, ________, _XXXX___, ________,
+  ________, ____XXXX, XXXX____, ________, XXXX____, ________, _XXXX___, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________
+};
+
+
+const unsigned char acON[] = {
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ____XXXX, XXXX____, ________, XXXXX___, ________, __XXXX__, ________,
+  ________, __XXXXXX, XXXXXXX_, ________, XXXXXX__, ________, __XXXX__, ________,
+  ________, XXXXXXXX, XXXXXXXX, ________, XXXXXX__, ________, __XXXX__, ________,
+  _______X, XXXXX___, ___XXXXX, X_______, XXXXXXX_, ________, __XXXX__, ________,
+  ______XX, XXX_____, _____XXX, XX______, XXXXXXXX, ________, __XXXX__, ________,
+  _____XXX, XX______, ______XX, XXX_____, XXXX_XXX, ________, __XXXX__, ________,
+  _____XXX, X_______, _______X, XXX_____, XXXX_XXX, X_______, __XXXX__, ________,
+  ____XXXX, X_______, ________, XXXX____, XXXX__XX, X_______, __XXXX__, ________,
+  ____XXXX, ________, ________, XXXX____, XXXX__XX, XX______, __XXXX__, ________,
+  ____XXXX, ________, ________, XXXXX___, XXXX___X, XX______, __XXXX__, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX___X, XXX_____, __XXXX__, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, XXXX____, __XXXX__, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, _XXX____, __XXXX__, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, _XXXX___, __XXXX__, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, __XXX___, __XXXX__, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, __XXXX__, __XXXX__, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, ___XXX__, __XXXX__, ________,
+  ___XXXX_, ________, ________, _XXXX___, XXXX____, ___XXXX_, __XXXX__, ________,
+  ___XXXXX, ________, ________, XXXX____, XXXX____, ____XXXX, __XXXX__, ________,
+  ____XXXX, ________, ________, XXXX____, XXXX____, _____XXX, __XXXX__, ________,
+  ____XXXX, ________, ________, XXXX____, XXXX____, _____XXX, X_XXXX__, ________,
+  _____XXX, X_______, _______X, XXX_____, XXXX____, ______XX, X_XXXX__, ________,
+  _____XXX, XX______, ______XX, XXX_____, XXXX____, ______XX, XXXXXX__, ________,
+  ______XX, XXX_____, _____XXX, XX______, XXXX____, _______X, XXXXXX__, ________,
+  _______X, XXXXX___, ___XXXXX, X_______, XXXX____, _______X, XXXXXX__, ________,
+  ________, XXXXXXXX, XXXXXXXX, ________, XXXX____, ________, XXXXXX__, ________,
+  ________, _XXXXXXX, XXXXXX__, ________, XXXX____, ________, XXXXXX__, ________,
+  ________, ____XXXX, XXXX____, ________, XXXX____, ________, _XXXXX__, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________,
+  ________, ________, ________, ________, ________, ________, ________, ________
+};
+static const GUI_BITMAP bm_1bpp_OFF = { 64, 64, 8, 1, acOFF, &Palette};
+static const GUI_BITMAP bm_1bpp_ON = { 64, 64, 8, 1, acON, &Palette};
+
 
 static FRAMEWIN_Handle hFrame = 0;
 static BUTTON_Handle hButton1;
 static BUTTON_Handle hButton2;
-WM_HWIN hdlg = 0;
+static WM_HWIN this = 0;
 
 #define GUI_ID_PP (GUI_ID_BUTTON0+0)
 #define GUI_ID_APD (GUI_ID_BUTTON0+1)
@@ -52,10 +192,12 @@ WM_HWIN hdlg = 0;
 #define GUI_ID_PWM_REVERSAL (GUI_ID_BUTTON0+3)
 #define GUI_ID_PWM_WIDTH (GUI_ID_BUTTON0+4)
 #define GUI_ID_LASTER (GUI_ID_BUTTON0+5)
+#define GUI_ID_SETTING (GUI_ID_BUTTON0+6)
+#define GUI_ID_DELETE (GUI_ID_BUTTON0+8)
 
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320, 240 , FRAMEWIN_CF_MOVEABLE },
+	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320, 220 , FRAMEWIN_CF_MOVEABLE },
 	//	 { LISTBOX_CreateIndirect,	 0,						 GUI_ID_MULTIEDIT0,	10,	10, 100, 100, 0, 100 },
 	// /* Check box for multi select mode */
 	//	 { CHECKBOX_CreateIndirect,	0,						 GUI_ID_CHECK0,	 120,	10,	 0,	 0 },
@@ -66,28 +208,33 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	// /* Buttons */
 	//	 { BUTTON_CreateIndirect,	"OK",						GUI_ID_OK,		 120,	65,	80,	20 },
 	//	 { BUTTON_CreateIndirect,	"Cancel",					GUI_ID_CANCEL,	 120,	90,	80,	20 },
-	{BUTTON_CreateIndirect,	 "ON/OFF",					GUI_ID_PP,	 22,15,136,136},
-	{BUTTON_CreateIndirect,	 "APD",						GUI_ID_APD,	 162,15,66,66},
-	{BUTTON_CreateIndirect,	 "PWM",						GUI_ID_PWM,	 232,15,66,66},
-	{BUTTON_CreateIndirect,	 "PWM\r\nNormal",			GUI_ID_PWM_REVERSAL,	 162,85,66,66},
-	{BUTTON_CreateIndirect,	 "1us",						GUI_ID_PWM_WIDTH,	 232,85,66,66},
-	{BUTTON_CreateIndirect,	 "Laster",						GUI_ID_LASTER,	 22,155,66,66},
-	// {BUTTON_CreateIndirect,	 "2",						GUI_ID_BUTTON0+6,	 95,155,66,66},
-	// {BUTTON_CreateIndirect,	 "2",						GUI_ID_BUTTON0+7,	 162,155,136,66},
+	{BUTTON_CreateIndirect,	 "",					GUI_ID_PP,	 22,15 - 7,136,136},
+	{BUTTON_CreateIndirect,	 "APD",						GUI_ID_APD,	 162,15 - 7,66,66},
+	{BUTTON_CreateIndirect,	 "PWM",						GUI_ID_PWM,	 232,15 - 7,66,66},
+	// {BUTTON_CreateIndirect,	 "PWM\r\nNormal",			GUI_ID_PWM_REVERSAL,	 162,85 - 7,66,66},
+	{BUTTON_CreateIndirect,   "1us",           GUI_ID_PWM_WIDTH,  162,85 - 7,66,66},
+  {BUTTON_CreateIndirect,  "Laster",            GUI_ID_LASTER,   232,85 - 7,66,66},
+  {BUTTON_CreateIndirect,  "Set",           GUI_ID_SETTING,  22,155 - 7,66,66},
+  {BUTTON_CreateIndirect,  "Test",            GUI_ID_DELETE,   92,155 - 7,66,66},
+	// {BUTTON_CreateIndirect,	 "Test",						GUI_ID_DELETE,	 162,155 - 7,136,66},
 };
 
 void TurnBack(WM_HWIN	hWin)
 {
+	printf("%d", WM_GetWindowOrgY(hWin));
 	while(WM_GetWindowOrgY(hWin) > 50) {
 		while(WM_GetWindowOrgY(hWin) > 30) {
 			WM_MoveWindow(hWin,0,-20);
+			Delay_ms(60);
 			// Sleep(20);
-			GUI_Exec();
+			// GUI_Exec();
 		}
 		while(WM_GetWindowOrgY(hWin) > 10) {
 			WM_MoveWindow(hWin,0,-2);
+			Delay_ms(60);
+			// GUI_Exec();
 			// Sleep(20);
-			GUI_Exec();
+			// GUI_Exec();
 		}
 	}
 	WM_MoveTo(hWin,0,0);
@@ -101,7 +248,7 @@ static void _cbBkWindow(WM_MESSAGE* pMsg)
 
 	switch (pMsg->MsgId) {
 	case WM_PAINT:
-		GUI_SetBkColor(GUI_RED);
+		GUI_SetBkColor(COL_DIALOG_BK);
 		GUI_Clear();
 		// GUI_SetColor(GUI_WHITE);
 		// GUI_SetFont(&GUI_Font24_ASCII);
@@ -117,25 +264,35 @@ static void _cbBkWindow(WM_MESSAGE* pMsg)
 static int sg_bppdown = 0;//标识外部电源是否关闭
 void OnPerPowerClick(WM_MESSAGE * pMsg)
 {
-	char strout[200];
+	static int pp = 2222;
+	// char strout[200];
 	BUTTON_Handle hdc;
 	WM_HWIN hDlg;
 	int color;
 
 	hdc = pMsg->hWinSrc;
-	BUTTON_GetText(hdc,strout,200);
-	if (strout[1] == 'n') {
-		BUTTON_SetText(hdc, "Off");
+	// strout[0] = 'a';
+	// strout[1] = '\0';
+	// BUTTON_GetText(hdc,strout,200);
+	switch(pp) {
+	case 0:
 		Ctrl_PeripheralPower(CTRL_PP_OFF);
-		color = RGB(255,255,255);
+		BUTTON_SetBitmapEx(hButton1, 0, &bm_1bpp_OFF, 36, 36);
+		
+		color = COL_DISABLE;
 		sg_bppdown = 1;
-	}
-	else {
-		BUTTON_SetText(hdc, "On");
+		pp = 1;
+		break;
+	default:// 'H':
 		Ctrl_PeripheralPower(CTRL_PP_ON);
-		color = RGB(0,0,0);
+		BUTTON_SetBitmapEx(hButton1, 0, &bm_1bpp_ON, 36, 36);
+		color = COL_ENABLE;
 		sg_bppdown = 0;
+		pp = 0;
+		break;
 	}
+
+
 	
 
 	hDlg = pMsg->hWin;
@@ -271,12 +428,13 @@ void OnWidthClick(WM_MESSAGE * pMsg)
 	static int pwm_width = 1000;
 	struct ctrl_pwm pwm1,pwm2;
 	struct pwm_array array[] = {
-		{1,"27ns"},
-		{9,"250ns"},
-		{18,"500ns"},
-		{36,"1us"},
+		// {1,"27ns"},
+		// {9,"250ns"},
+		// {18,"500ns"},
+		// {36,"1us"},
 		{360,"10us"},
 		{720,"20us"},
+		{1420,"40us"},
 
 		// only for debug
 		// {10000,"27ns"},
@@ -344,12 +502,102 @@ void OnLaserClick(WM_MESSAGE * pMsg)
 		break;
 	}
 }
-void Init_Ctrl(WM_MESSAGE * pMsg)
-{
-	WM_HWIN hDlg;
-	WM_MESSAGE msg;
 
+static const GUI_WIDGET_CREATE_INFO _aDialogCreatemsg[] = {
+	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 120, 120 , FRAMEWIN_CF_MOVEABLE },
+	{BUTTON_CreateIndirect,	 "ON/OFsss",					GUI_ID_PP,	 22,15,36,36},
+};
+
+static void _cbCallback2(WM_MESSAGE * pMsg) {
+	char strout[222];
+	static GUI_RECT rect;
+	int NCode, Id;
+	static int x0,y0 = 0;
+	int x1,y1;
+	static int fpress = 0;
+	int press = 0;
+	GUI_PID_STATE state;
+
+	WM_HWIN hDlg, hListBox, hItem;
 	hDlg = pMsg->hWin;
+	hListBox = WM_GetDialogItem(hDlg, GUI_ID_MULTIEDIT0);
+
+
+	switch (pMsg->MsgId) {
+
+	case WM_INIT_DIALOG:
+
+		// // hButton1 = WM_GetDialogItem(pMsg->hWin, GUI_ID_BUTTON0);
+		// // BUTTON_SetText(hButton1, "dfwer");
+		// // GUI_SetFont(&GUI_Font8x10_ASCII);
+		// hFrame = WM_GetDialogItem(pMsg->hWin, 0);
+		// FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
+		// FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));
+		// FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
+		// Init_Ctrl(pMsg);
+
+		break;
+	default:
+		WM_DefaultProc(pMsg);
+	}
+}
+WM_HWIN hWin = 0;
+WM_HWIN hWinTest = 0;
+void OnSettingClick(WM_MESSAGE * pMsg)
+{
+	// int i;
+	// char strout[220];
+	// struct point pt;
+	// if (hWin != 0) {
+	// 	WM_ShowWindow(hWin);
+	// 	return ;
+	// }
+
+	Delay_ms(300);
+	WM_HideWindow(pMsg->hWin);
+	hWin = TPAdjustDlg_Create(pMsg->hWin);
+	// WM_BringToTop(hWin);
+	// // TC_Adj();
+	// TC_Test();
+	
+	// WM_ShowWindow(pMsg->hWin);
+	// WM_InvalidateWindow(pMsg->hWin);
+	// WM_SendMessage(WM_PAINT, pMsg);
+	
+	// WM_DeleteWindow(hWin);
+	printf("are you look me ? %x\r\n",hWin);
+	
+
+
+}
+void OnDeleteClick(WM_MESSAGE * pMsg)
+{
+	// if (hWinTest != 0) {
+	// 	WM_ShowWindow(hWinTest);
+	// 	return ;
+	// }
+	WM_HideWindow(pMsg->hWin);
+	hWinTest = TPTestDlg_Create(pMsg->hWin);
+	// WM_BringToTop(hWinTest);
+	// WM_ShowWindow(pMsg->hWin);	
+}
+static void Init_Ctrl(WM_MESSAGE * pMsg)
+{
+	int i;
+	WM_HWIN hDlg,hButton;
+	WM_MESSAGE msg;
+	// char strout[200];
+	hDlg = pMsg->hWin;
+	for (i = 1; i < sizeof(_aDialogCreate) / sizeof(GUI_WIDGET_CREATE_INFO); i++) {
+		
+		hButton = WM_GetDialogItem(hDlg, _aDialogCreate[i].Id);
+		
+		// BUTTON_SetBkColor(hButton, 1, COL_BUTTON_BK);
+		// BUTTON_SetBkColor(hButton, 0, COL_BUTTON_BK);
+		// BUTTON_SetTextColor(hButton1, 0, COL_ENABLE);
+		// BUTTON_SetTextColor(hButton1, 1, COL_ENABLE);//RGB(255,0,0));
+	}
+
 
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_PP);
 	OnPerPowerClick(&msg);
@@ -363,6 +611,14 @@ void Init_Ctrl(WM_MESSAGE * pMsg)
 	OnWidthClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_LASTER);
 	OnLaserClick(&msg);
+
+	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_DELETE);
+	BUTTON_SetTextColor(msg.hWinSrc, 0, COL_ENABLE);
+	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_SETTING);
+	BUTTON_SetTextColor(msg.hWinSrc, 0, COL_ENABLE);
+
+	WM_HideWindow(this);
+	WM_ShowWindow(this);
 }
 // ***************************************************************************
 
@@ -408,6 +664,8 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		case GUI_ID_LASTER:
 			OnLaserClick(pMsg);
 			break;
+		case GUI_ID_SETTING:
+			OnSettingClick(pMsg);
 		default:
 			break;
 		}
@@ -425,67 +683,85 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		// printf(".............................\r\n");
 		break;
 	case WM_INIT_DIALOG:
+		
+
+		// hButton1 = WM_GetDialogItem(pMsg->hWin, GUI_ID_PP);
+		// BUTTON_SetBkColor(hButton1, 0, RGB(255,0,0));
+		// BUTTON_SetBkColor(hButton1, 1, RGB(255,255,0));
+		// BUTTON_SetBkColor(hButton1, 2, RGB(0,0,255));
+
+		// BUTTON_SetBkColor(hButton1, 1, RGB(0,128,255));
+		// BUTTON_SetBkColor(hButton1, 0, RGB(0,128,255));
 		// hButton1 = WM_GetDialogItem(pMsg->hWin, GUI_ID_BUTTON0);
 		// BUTTON_SetText(hButton1, "dfwer");
-		// GUI_SetFont(&GUI_Font8x10_ASCII);
+		GUI_SetFont(&GUI_Font8x15B_ASCII);
 		hFrame = WM_GetDialogItem(pMsg->hWin, 0);
 		FRAMEWIN_SetTitleVis(pMsg->hWin, 0);
-		FRAMEWIN_SetClientColor(pMsg->hWin, RGB(255,0,0));
 		FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
+		FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
 		Init_Ctrl(pMsg);
 	case WM_TOUCH:
+		WM_MoveWindow(this, 100, 100);
+		printf("touch \n");
+		TurnBack(this);
 		break;
 
 	case WM_NOTIFY_PARENT:
 		Id = WM_GetId(pMsg->hWinSrc);
 		NCode = pMsg->Data.v;		
 		switch(NCode) {
-	case WM_NOTIFICATION_CLICKED:
+		case WM_NOTIFICATION_CLICKED:
 
-		Id = WM_GetId(pMsg->hWinSrc);
-		WM_SetFocus(pMsg->hWinSrc);
-		switch (Id) {
-		case GUI_ID_PP:
-			OnPerPowerClick(pMsg);
+			Id = WM_GetId(pMsg->hWinSrc);
+			WM_SetFocus(pMsg->hWinSrc);
+			switch (Id) {
+			case GUI_ID_PP:
+				OnPerPowerClick(pMsg);
+				break;
+			case GUI_ID_APD:
+				OnAPDClick(pMsg);
+				break;
+			case GUI_ID_PWM:
+				OnPWMClick(pMsg);
+				break;
+			case GUI_ID_PWM_REVERSAL:
+				OnReversalClick(pMsg);
+				break;
+			case GUI_ID_PWM_WIDTH:
+				OnWidthClick(pMsg);
+				break;
+			case GUI_ID_LASTER:
+				OnLaserClick(pMsg);
+				break;
+			case GUI_ID_SETTING:
+				OnSettingClick(pMsg);
+				break;
+			case GUI_ID_DELETE:
+				OnDeleteClick(pMsg);
+				break;
+			default:
+				break;
+			}
 			break;
-		case GUI_ID_APD:
-			OnAPDClick(pMsg);
-			break;
-		case GUI_ID_PWM:
-			OnPWMClick(pMsg);
-			break;
-		case GUI_ID_PWM_REVERSAL:
-			OnReversalClick(pMsg);
-			break;
-		case GUI_ID_PWM_WIDTH:
-			OnWidthClick(pMsg);
-			break;
-		case GUI_ID_LASTER:
-			OnLaserClick(pMsg);
-			break;
-		default:
-			break;
-		}
-		break;
-		hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-		BUTTON_SetText(hButton1, "Click");	
+			hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
+			BUTTON_SetText(hButton1, "Click");	
 
-		break;
-	case WM_NOTIFICATION_GOT_FOCUS:
-		hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-		BUTTON_SetTextColor(hButton1, 0, RGB(255,0,0));
-		break;
-	case WM_NOTIFICATION_LOST_FOCUS:
-		hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
-		if (sg_bppdown == 0) {
+			break;
+		case WM_NOTIFICATION_GOT_FOCUS:
+			hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
+			// BUTTON_SetTextColor(hButton1, 0, COL_FOCUS);
+			break;
+		case WM_NOTIFICATION_LOST_FOCUS:
+			hButton1 = WM_GetDialogItem(pMsg->hWin, Id);
+			// if (sg_bppdown == 0) {
+				
+			// 	BUTTON_SetTextColor(hButton1, 0, COL_ENABLE);	
+			// }
+			// else {
+			// 	BUTTON_SetTextColor(hButton1, 0, COL_DISABLE);
+			// }
 			
-			BUTTON_SetTextColor(hButton1, 0, RGB(0,0,0));	
-		}
-		else {
-			BUTTON_SetTextColor(hButton1, 0, RGB(255,255,255));		
-		}
-		
-		break;
+			break;
 		}
 		break;
 
@@ -625,5 +901,6 @@ void MainTask()
 	// hFrame = FRAMEWIN_Create("test",0,WM_CF_SHOW,0,0,320,240); 
 	FRAMEWIN_SetTitleVis(hFrame, 0);
 	WM_SetCallback(WM_HBKWIN, &_cbBkWindow);
-	hdlg = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), &_cbCallback, (WM_HWIN)WM_HBKWIN, 0, 0); 
+	this = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), &_cbCallback, (WM_HWIN)WM_HBKWIN, 0, 0); 
 }
+

@@ -1,8 +1,8 @@
 #ifndef _PROJECT_H_
 #define _PROJECT_H_
 #include "stm32f10x_tim.h" 
-
-
+#include "USER/TouchPanel/ads7843.h"
+#include "WM.h"
 //屏蔽警告
 #pragma diag_suppress 167
 #pragma diag_suppress 174
@@ -10,6 +10,34 @@
 #pragma diag_suppress 68//强制转换有符号和无符号
 
 
+#define RGB8(r,g,b)	 // todo
+#define RGB565(r,g,b)	 ((unsigned short) ( ((r) >> 3) << 11 ) | ( ((g) >> 2) << 5) | ( ((b) >> 3) << 0) )
+#define RGB24(r,g,b)		((unsigned long) ( (r) << 16 )		| ( (g) << 8)		| ( (b) << 0) )
+
+#define CONFIG_LCD_BPP	(24)
+// Define RGB macro
+#if CONFIG_LCD_BPP == 24
+#define RGB(r,g,b)		RGB24((r),(g),(b))
+
+#elif CONFIG_LCD_BPP == 16
+#define RGB(r,g,b)		RGB565((r),(g),(b))
+
+#elif CONFIG_LCD_BPP == 8
+#define RGB(r,g,b)		RGB8((r),(g),(b))
+
+#else
+#warning "CONFIG_LCD_BPP only with 8/16/24 check out lcdconf.h"
+#define RGB(r,g,b) RGB24((r),(g),(b))
+#endif
+
+#define RGB16(r,g,b) RGB565((r),(g),(b))
+
+
+#define COL_FOCUS (RGB(0,0,0))
+#define COL_ENABLE (RGB(255,255,255))
+#define COL_DISABLE (RGB(120,120,120))
+#define COL_BUTTON_BK (RGB(0,128,255))
+#define COL_DIALOG_BK (RGB(30,30,30))
 
 /*按键*/
 #define KEY_A GPIO_Pin_5
@@ -20,6 +48,17 @@
 #define KEY_Z GPIO_Pin_6
 
 
+struct wm_glide
+{
+	WM_HWIN hWin;
+	int en;
+	int d1_x;
+	int d1_y;
+	int d1_loop;
+	int d2_x;
+	int d2_y;
+	int d2_loop;
+};
 // ***************************************************************************
 // 激光器测试平台
 #define CTRL_LASER_LV 0

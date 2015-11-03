@@ -653,28 +653,42 @@ void TIM4_Init(uint16_t  TIM_Period1490)
  */
 void TIM5_Init(uint16_t  TIM_Period1550)
 {
+	// TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	// /* TIM5 clock enable */
+	// RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE); 
+
+	// /* ---------------------------------------------------------------
+	// TIM4 Configuration: Output Compare Timing Mode:
+	// TIM2CLK = 36 MHz, Prescaler = 7200, TIM2 counter clock = 7.2 MHz
+	// --------------------------------------------------------------- */
+	// /* Time base configuration */
+	// TIM_TimeBaseStructure.TIM_Period		= TIM_Period1550;	//自动加载的计数值。。。
+	// TIM_TimeBaseStructure.TIM_Prescaler		= (1000 - 1);
+	// TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	// TIM_TimeBaseStructure.TIM_CounterMode	= TIM_CounterMode_Up;
+
+	// TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
+	// /* Clear TIM5 update pending flag[清除TIM5溢出中断标志] */
+	// TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
+	// /* TIM IT enable */
+	// TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);
+	// /* TIM5 enable counter */
+	// TIM_Cmd(TIM5, ENABLE);
+	// TIM_Cmd(TIM5, DISABLE);
+
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-	/* TIM5 clock enable */
+	/* TIM3 clock enable */
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE); 
-
-	/* ---------------------------------------------------------------
-	TIM4 Configuration: Output Compare Timing Mode:
-	TIM2CLK = 36 MHz, Prescaler = 7200, TIM2 counter clock = 7.2 MHz
-	--------------------------------------------------------------- */
-	/* Time base configuration */
-	TIM_TimeBaseStructure.TIM_Period		= TIM_Period1550;	//自动加载的计数值。。。
-	TIM_TimeBaseStructure.TIM_Prescaler		= (1000 - 1);
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	//时钟72M    1ms中断  向上计数
+	TIM_TimeBaseStructure.TIM_Period		= 10-1;
+	TIM_TimeBaseStructure.TIM_Prescaler		= 7200-1;
 	TIM_TimeBaseStructure.TIM_CounterMode	= TIM_CounterMode_Up;
-
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
-	/* Clear TIM5 update pending flag[清除TIM5溢出中断标志] */
+
 	TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
-	/* TIM IT enable */
-	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);
-	/* TIM5 enable counter */
+	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE); //开定时器中断
 	TIM_Cmd(TIM5, ENABLE);
-	TIM_Cmd(TIM5, DISABLE);
 }
 
 /**
@@ -742,20 +756,20 @@ void NVIC_Configuration(void)
 
 	/* Enable the TIM5 gloabal Interrupt */
 	NVIC_InitStructure.NVIC_IRQChannel					 = TIM5_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	//NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 
 	NVIC_InitStructure.NVIC_IRQChannel					 = TIM6_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 1;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	
 	NVIC_InitStructure.NVIC_IRQChannel					 = EXTI0_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 1;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
@@ -770,12 +784,37 @@ void NVIC_Configuration(void)
 void FLASH_Configuration()
 {
 	uint32_t i;
+	struct point pt[] = {
+		{60,                 60},
+		{LCD_XSIZE_TFT - 60,                 60},
+		{60,                 LCD_YSIZE_TFT - 60},
+		{LCD_XSIZE_TFT - 60 ,LCD_YSIZE_TFT - 60},
+		{LCD_XSIZE_TFT / 2, LCD_YSIZE_TFT / 2},
+		{0, 0},
+	};
+	struct point adj[6];
+	
+	// return ;
 	ReadFlash(FLASH_PAGE_START, 
 		(uint32_t*)&(g_env), 
 		sizeof(struct project_env));
+
+	// 
+	// 
+	// 
+	// 
+	// 
 	if(g_env.flag != 0xaabbccdd) 
 	{
-		TC_Adj();
+		// TC_Adj();
+		adj[0].x = 2712; adj[0].y = 992;
+		adj[1].x = 2899; adj[1].y = 3304;
+		adj[2].x = 1149; adj[2].y = 868;
+		adj[3].x = 1134; adj[3].y = 3309;
+		adj[4].x = 2056; adj[4].y = 2089;
+		tp_adj(pt, adj, &g_env.adj_tp);
+
+		tp_setadj(&g_env.adj_tp);
 		tp_getadj(&g_env.adj_tp);
 
 		g_env.flag = 0xaabbccdd;
@@ -3134,9 +3173,9 @@ void Init_Key()
 
 int32_t ScanKey()
 {
-	if(KeyDown(KEY_GPIO_X, KEY_LT)) {
+	if(KeyPress(KEY_GPIO_X, KEY_LT)) {
 		printf("KEY_LT\r\n");
-		// GUI_StoreKeyMsg(GUI_KEY_LEFT,1);
+		GUI_StoreKeyMsg(GUI_KEY_SHIFT_TAG,1);
 		return 0;
 	}
 	else if(KeyPress(KEY_GPIO_X, KEY_RT)) {
@@ -3145,23 +3184,25 @@ int32_t ScanKey()
 		// GUI_StoreKeyMsg(GUI_KEY_RIGHT,1);
 		return 0;
 	}
-	else if(KeyDown(KEY_GPIO_X, KEY_M)) {
+	else if(KeyPress(KEY_GPIO_X, KEY_M)) {
 
 		printf("KEY_M\r\n");
 		GUI_StoreKeyMsg(GUI_KEY_ENTER,1);
 		return 0;
 	}
-	else if(KeyDown_Ex(KEY_GPIO_X, KEY_LB)) {
+	else if(KeyPress(KEY_GPIO_X, KEY_LB)) {
 		printf("KEY_LB\r\n");
 		GUI_StoreKeyMsg(GUI_KEY_TAB,1);
 		return 0;
 	}
-	else if(KeyDown(KEY_GPIO_X, KEY_RB)) {
+	else if(KeyPress(KEY_GPIO_X, KEY_RB)) {
 		printf("KEY_RB\r\n");
 		return 0;
 	}
 }
 
+struct wm_glide glide;
+extern volatile uint32_t g_en ,g_tickgui ;
 extern WM_HWIN hdlg ;
 /*******************************************************************************
 * Function Name  : main
@@ -3175,6 +3216,7 @@ extern WM_HWIN hdlg ;
 extern WM_HWIN hdlg ;
 int main(void)
 {
+	int index_move;
 	GUI_RECT rect;
 	int fpress = 0;
 	int press = 0;
@@ -3186,6 +3228,7 @@ int main(void)
 	int touch_x, touch_y;
 	int tick = 0;
 	WM_MESSAGE msg;
+	WM_HWIN hMain, hleft,hright;
 	USART_Configuration();
 	Init_PWM();
 	Init_LED();
@@ -3198,6 +3241,7 @@ int main(void)
 	USART_SendData(USART3, (uint8_t) 'd');
 	printf("\n\n----------------------------------------------------------------------------\n");
 	printf("        GLink TS100 Runing\n");
+
 #define SYSCLK_FREQ_72MHz
 	SystemInit();//SetSysClock();
 	
@@ -3219,6 +3263,7 @@ int main(void)
 	Function_IO_config(); 
 	// uTLaser 2015-8-31
 	Init_PWM();
+	TIM5_Init(0);
 	TIM2_Configuration();
 	TIM3_Configuration();
 	{
@@ -3251,9 +3296,9 @@ int main(void)
 	// while (1) 
 	{
 		Ctrl_LaserPower(CTRL_LASER_HV);
-		// Delay_ms(200);
+		Delay_ms(200);
 		Ctrl_LaserPower(CTRL_LASER_MV);
-		// Delay_ms(200);
+		Delay_ms(200);
 		Ctrl_LaserPower(CTRL_LASER_LV);
 		// Delay_ms(200);
 
@@ -3301,7 +3346,7 @@ int main(void)
 	LCD_L0_SetPixelIndex(10, 191, RGB16(255, 0, 0));
 	LCD_L0_SetPixelIndex(10, 192, RGB16(255, 0, 0));
 	LCD_L0_SetPixelIndex(10, 193, RGB16(255, 0, 0));
-	LCD_SetPoint(100, 240, RGB16(255, 0, 0));
+	// LCD_SetPoint(100, 240, RGB16(255, 0, 0));
 	gl_setarea(10, 200, 320, 240);
 	gl_setpoint(10, 200, RGB16(255, 0, 0));
 	gl_setpoint(10, 201, RGB16(0, 255, 0));
@@ -3312,20 +3357,60 @@ int main(void)
 	//gl_text(0, 200-12, "abcdefg", -1);
 	// TestWin();
 	
+	g_en = 1;
 	TP_Init();
 	TP_EINT();
 	TP_GetADC(&pt);
 	// TC_Adj();
+	// TC_Adj();
+	// Delay_ms(1000);
 	FLASH_Configuration();
 	TC_Test();
 	
 	//while(1);
 	
-	MainTask();
+	TEXT_SetDefaultTextColor(COL_ENABLE);
+	BUTTON_GetDefaultTextColor(COL_ENABLE);
+	BUTTON_SetDefaultBkColor(COL_BUTTON_BK, 0);
+	BUTTON_SetDefaultBkColor(COL_BUTTON_BK, 1);
+	BUTTON_SetDefaultTextColor(COL_ENABLE, 0);
+	BUTTON_SetDefaultTextColor(COL_FOCUS, 1);
+	hMain = MainTask();
 
+	hleft = DestopBtn_Create(WM_HBKWIN, hMain);
+	// WM_BringToBottom(hMain);
+	// WM_BringToTop(hleft);
+
+
+	
 	while(1) {
-		ScanKey();
-		GUI_Exec();	
+		if (glide.en == 1) {
+			// while(glide.s_x != glide.e_x) {
+			// 	glide.s_x += glide.d_x;
+			// 	glide.s_y += glide.d_y;
+				// WM_MoveTo(hMain, glide.s_x,0);
+			while(glide.d1_loop > 0) {
+				WM_MoveWindow(hMain, glide.d1_x, glide.d1_y);
+				printf("%d \n", glide.d1_loop);
+				glide.d1_loop--;
+				Delay_ms(30);
+			}
+			while(glide.d2_loop > 0) {
+				WM_MoveWindow(hMain, glide.d2_x, glide.d2_y);
+				printf("%d \n", glide.d2_loop);
+				glide.d2_loop--;
+				Delay_ms(10);
+
+			}
+			
+			glide.en = 0;
+		}
+		// Delay_ms(1000);
+		// WM_MoveTo(hMain, 0,30);
+		// Delay_ms(1000);
+		// WM_MoveTo(hMain, 0,0);
+		// ScanKey();
+		// GUI_Exec();	
 	}
 	
 	// DemoRedraw();
