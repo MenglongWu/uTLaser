@@ -64,16 +64,18 @@ static int move = 0;
 extern struct wm_glide glide;
 static void OnLeftClick(WM_MESSAGE * pMsg)
 {
-  // WM_HWIN hWin;
-  // hWin = WM_GetDialogItem(pMsg->hWin, GUI_ID_LEFT);;
-  // BUTTON_SetText(hWin, "dddf");
-  // WM_HideWindow(this);
-  // GUI_EndDialog(this,0);
-  
-  if (move < -100) {
+  GUI_RECT rect;
+
+  WM_GetWindowRectEx(hMain, &rect);
+
+  if (rect.x1 - 100 < 30) {
     return ;
   }
-  move -= 100;
+  
+  // if (move < -100) {
+  //   return ;
+  // }
+  // move -= 100;
   glide.d1_x = -20;
   glide.d1_y = 0;
   glide.d1_loop = 3;
@@ -94,10 +96,17 @@ static void OnLeftClick(WM_MESSAGE * pMsg)
 
 static void OnRightClick(WM_MESSAGE * pMsg)
 {
-  if (move >= 0) {
+  GUI_RECT rect;
+
+  WM_GetWindowRectEx(hMain, &rect);
+
+  if (rect.x0 + 100 > 0) {
     return ;
   }
-  move += 100;
+  // if (move >= 0) {
+  //   return ;
+  // }
+  // move += 100;
 
   glide.d1_x = 20;
   glide.d1_y = 0;
