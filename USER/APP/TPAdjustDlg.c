@@ -39,7 +39,7 @@ static WM_HWIN parent = 0;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320, 240 , FRAMEWIN_CF_MOVEABLE },
-	{BUTTON_CreateIndirect,	 "CLOSE",						GUI_ID_CLOSE,	 0,0,50,20},
+	{BUTTON_CreateIndirect,	 "Close",						GUI_ID_CLOSE,	 0,0,40,20},
 	// /* Buttons */
 	//	 { BUTTON_CreateIndirect,	"OK",						GUI_ID_OK,		 120,	65,	80,	20 },
 	//	 { BUTTON_CreateIndirect,	"Cancel",					GUI_ID_CANCEL,	 120,	90,	80,	20 },

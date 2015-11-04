@@ -1,3 +1,11 @@
+2015-11-4: MenglongWoo
+    - 测试产品功耗，
+        + 上电开启12V0.1A
+        + PWM开启反转12V0.25A
+        + 关闭外设电源12V0.04A
+        + 将外设PIN时钟由50MHz改成2MHz12V0.1A
+        + 
+
 2015-11-3: MenglongWoo
     - Add 添加BUTTON位图
     - Add DesktopBtn 移动主窗口
