@@ -459,7 +459,6 @@ static void  DrawBitLine16BPP(int x, int y, U16 const GUI_UNI_PTR * p, int xsize
 *   calling this routine make sure that the coordinates are in range, so
 *   that no check on the parameters needs to be performed.
 */
-int g_color = 0;
 void LCD_L0_SetPixelIndex(int x, int y, int PixelIndex) {
   /* Convert logical into physical coordinates (Dep. on LCDConf.h) */
   #if LCD_SWAP_XY | LCD_MIRROR_X| LCD_MIRROR_Y

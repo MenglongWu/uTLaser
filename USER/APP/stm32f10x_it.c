@@ -116,7 +116,7 @@ void TIM4_IRQHandler(void)	   //1490nm控制
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 	}
 }
-
+extern int g_lcd_test;
 /**
 * @brief  This function handles TIM5 global interrupt request.
 * @param  None
@@ -137,6 +137,7 @@ void TIM5_IRQHandler(void)	   //1550nm控制
 			t = 0;
 		}
 #endif
+		g_lcd_test++;
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
 	}
 }
@@ -153,7 +154,7 @@ void TIM6_IRQHandler(void)
 		
 #ifdef _DEBUG_
 		if (t++ >= 1000) {
-			printf("TIM5 IRQ\n");
+			printf("TIM6 IRQ\n");
 			t = 0;
 		}
 #endif
