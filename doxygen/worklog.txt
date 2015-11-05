@@ -1,10 +1,41 @@
 2015-11-4: MenglongWoo
+    - <h3>完成优化ucgui SSD1963驱动关键部分代码</h3>    
+    - SSD1963 图像处理器特质驱动优化部分包括
+        - 新增 LCD_Area 
+        - _DrawBitLine1BPP
+            - 普通模式
+            - 透明模式
+            - 不包括异或模式LCD_DRAWMODE_XOR
+        - _DrawBitLine2BPP
+            - 普通模式
+            - 透明模式
+        - LCD_L0_SetPixelIndex
+        - 新增 LCD_L0_GetPixelIndex
+        - LCD_L0_FillRect
+        - LCD_L0_DrawHLine
+        - LCD_L0_DrawVLine
+    
+    优化效率对比，同一个函数采用优化前后采用相同的测试代码
+    |     函数         |    原始耗时ms      |优化后耗时ms |  提升比     |
+    | :------------:   | :---------------:  | :------------:|:------------:
+    | LCD_L0_FillRect  | 8508               | 584           |14.57
+    | LCD_L0_DrawHLine | 2676               | 194           |13.79
+    | LCD_L0_DrawVLine | 2656               | 194           |13.69
+    | _DrawBitLine1BPP |                    |               |
+    | 普通模式         | 16345              | 2080          |7.86
+    | 透明模式         | 3712               | 2161          |1.72
+    | _DrawBitLine2BPP |                    |               |
+    | 普通模式         | 7873               | 880           |8.95
+    | 透明模式         | 7844               | 842           |9.32
+
+
+2015-11-4: MenglongWoo
     - 测试产品功耗，
         + 上电开启12V0.1A
         + PWM开启反转12V0.25A
         + 关闭外设电源12V0.04A
         + 将外设PIN时钟由50MHz改成2MHz12V0.1A
-        + 
+    - <h3>开始优化ucgui驱动</h3>    
 
 2015-11-3: MenglongWoo
     - Add 添加BUTTON位图
