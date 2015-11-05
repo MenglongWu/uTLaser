@@ -62,6 +62,7 @@ uTlaser 公司内部使用的光器件测试平台，包括测试连续激光器
 #endif
 
 struct project_env g_env;
+int g_lcd_test = 0;
 
 /*****************************************************************************
 工程模块配置
@@ -142,6 +143,9 @@ void TIM3_Init(void)
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; //输出极性:TIM输出比较极性高
 	TIM_OC2Init(TIM3, &TIM_OCInitStructure);  //根据TIM_OCInitStruct中指定的参数初始化外设TIMx
 	TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);  //使能TIMx在CCR2上的预装载寄存器
+
+	TIM_OC1Init(TIM3, &TIM_OCInitStructure);  //根据TIM_OCInitStruct中指定的参数初始化外设TIMx
+	TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);  //使能TIMx在CCR2上的预装载寄存器
 	//上面两句中的OC2确定了是channle几，要是OC3则是channel 3  
 
 	TIM_ARRPreloadConfig(TIM3, ENABLE); //使能TIMx在ARR上的预装载寄存器 
@@ -593,7 +597,7 @@ void Ctrl_PWM(struct ctrl_pwm *val)
 
 
 	TIM_Cmd(val->timer, DISABLE);  //使能TIMx外设
-	TIM_OCInitStructure.TIM_OCMode      = TIM_OCMode_PWM1; //选择定时器模式:TIM脉冲宽度调制模式2
+	TIM_OCInitStructure.TIM_OCMode      = TIM_OCMode_PWM2; //选择定时器模式:TIM脉冲宽度调制模式2
 	TIM_OCInitStructure.TIM_OutputState = val->enable; //比较输出使能
 	TIM_OCInitStructure.TIM_Pulse       = val->high;                   //设置待装入捕获比较寄存器的脉冲值，初始的占空比
 	TIM_OCInitStructure.TIM_OCPolarity  = TIM_OCPolarity_High; //输出极性:TIM输出比较极性高
@@ -779,6 +783,7 @@ int32_t ScanKey()
 struct wm_glide glide;
 extern volatile uint32_t g_en ,g_tickgui ;
 extern WM_HWIN hdlg ;
+
 /*******************************************************************************
 * Function Name  : main
 * Description    : Main program
@@ -789,6 +794,59 @@ extern WM_HWIN hdlg ;
 *******************************************************************************/
 //main(
 extern WM_HWIN hdlg ;
+extern const unsigned char acOFF[512];
+extern GUI_CONST_STORAGE unsigned char acpwm[1024];
+#include "../uCGUI/GUI/Core/GUI_Protected.h"
+void Test_LCD_L0_DrawBitmap_1BPP()
+{
+	int i;
+	short index[2];
+
+	g_lcd_test = 0;
+	printf("----Test_LCD_L0_DrawBitmap_1BPP----");
+	printf("start ...\n");
+
+	index[0] = 0xff0000;
+	index[1] = 0x00ff00;
+	GUI_Context.DrawMode |= LCD_DRAWMODE_TRANS;
+	for (i = 0; i < 1000; i++) {
+		LCD_L0_DrawBitmap(0,0,
+			64,64,
+			1,
+			8, 
+			&acOFF[0],
+			0,
+			index);
+	}
+	printf("end %d\n", g_lcd_test);
+}
+
+void Test_LCD_L0_DrawBitmap_2BPP()
+{
+	int i;
+	short index[4];
+	// return ;
+	g_lcd_test = 0;
+	printf("----Test_LCD_L0_DrawBitmap_2BPP----");
+	printf("start ...\n");
+
+
+	index[0] = 0xff0000;
+	index[1] = 0x00ff00;
+	index[2] = 0x0000ff;
+	index[3] = 0xf0f000;
+	// GUI_Context.DrawMode |= LCD_DRAWMODE_TRANS;
+	for (i = 0; i < 500; i++) {
+		LCD_L0_DrawBitmap(0,0,
+			64,64,
+			2,
+			16, 
+			&acpwm[0],
+			1,
+			index);
+	}
+	printf("end %d\n", g_lcd_test);
+}
 int main(void)
 {
 	int index_move;
@@ -874,7 +932,33 @@ int main(void)
 		// Delay_ms(1000);
 		Ctrl_APD(CTRL_APD_40V);
 		// Delay_ms(1000);
-	}	
+	}
+	{
+		int i;
+
+		LCD_Clear(RGB(255, 0, 0));
+		g_lcd_test = 0;
+		printf("start ...\n");
+		for (i  = 0; i < 30;i++) {
+			LCD_L0_FillRect(0, 0, 320, 240);
+		}
+		printf("end %d\n", g_lcd_test);
+		// for (i  = 0; i < 3000;i++) {
+		// 	LCD_L0_DrawVLine(0, 0,240);
+		// }
+
+		for (i  = 0; i < 3000;i++) {
+			LCD_L0_DrawHLine(0, 0,240);
+		}
+		// Test_LCD_L0_DrawBitmap_1BPP();
+		// Test_LCD_L0_DrawBitmap_2BPP();
+		LCD_Clear(RGB(0, 255, 0));
+		gl_fill_rect(0,0,10,10);
+		LCD_L0_FillRect(0, 0, 3, 3);
+		
+		
+	}
+	
 	
 	printf("Draw UI\n");
 	//LCD_DrawMain();
@@ -909,27 +993,30 @@ int main(void)
 	// MESSAGEBOX_Create("fds","df",GUI_MB_OK);
 	while(1) {
 		if (glide.en == 1) {
+			GUI_RECT rect;
+
 			// while(glide.s_x != glide.e_x) {
 			// 	glide.s_x += glide.d_x;
 			// 	glide.s_y += glide.d_y;
 				// WM_MoveTo(hMain, glide.s_x,0);
 			while(glide.d1_loop > 0) {
 				WM_MoveWindow(hMain, glide.d1_x, glide.d1_y);
-				printf("%d \n", glide.d1_loop);
+				// printf("%d \n", glide.d1_loop);
 				glide.d1_loop--;
 				Delay_ms(30);
 
 			}
 			while(glide.d2_loop > 0) {
 				WM_MoveWindow(hMain, glide.d2_x, glide.d2_y);
-				printf("%d \n", glide.d2_loop);
+				// printf("%d \n", glide.d2_loop);
 				glide.d2_loop--;
 				Delay_ms(10);
 			}
-
+ 			printf("after %d\n", rect.x0);
 			// GUI_Exec();
 			glide.en = 0;
 		}
+		// return 0;
 	}
 	
 	// DemoRedraw();
@@ -954,7 +1041,7 @@ int main(void)
 void Debug_ucgui()
 {
 	GUI_SetBkColor(RGB(0, 0, 0)); //设置背景颜色 
-	GUI_SetColor(RGB(255, 255, 255)); //设置前景颜色，及字体和绘图的颜色
+	GUI_SetColor(RGB(255, 0, 255)); //设置前景颜色，及字体和绘图的颜色
 	GUI_Clear(); //按指定颜色清屏
 	GUI_DispStringAt("Hello World ..", 0, 100); //显示字符
 	// GUI_CURSOR_Show();//显示鼠标, 测试触摸屏必须打开窗口功能 GUI_WINSUPPORT
