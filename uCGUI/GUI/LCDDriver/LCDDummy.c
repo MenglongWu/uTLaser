@@ -217,7 +217,7 @@ static void  _DrawBitLine2BPP(int x, int y, U8 const GUI_UNI_PTR * p, int Diff, 
   switch (GUI_Context.DrawMode & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
     case 0:
       if (pTrans) {
-        LCD_Area(x,y,xsize*2,y);
+        LCD_Area(x,y,xsize*4,y);
         do {
           int Shift = (3 - CurrentPixel) << 1;
           int Index = (Pixels & (0xC0 >> (6 - Shift))) >> Shift;
@@ -230,7 +230,7 @@ static void  _DrawBitLine2BPP(int x, int y, U8 const GUI_UNI_PTR * p, int Diff, 
           }
         } while (--xsize);
       } else {
-        LCD_Area(x,y,xsize*2,y);
+        LCD_Area(x,y,xsize*4,y);
         do {
           int Shift = (3 - CurrentPixel) << 1;
           int Index = (Pixels & (0xC0 >> (6 - Shift))) >> Shift;

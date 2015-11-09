@@ -820,10 +820,11 @@ void Test_LCD_L0_DrawBitmap_1BPP()
 	}
 	printf("end %d\n", g_lcd_test);
 }
+extern GUI_CONST_STORAGE unsigned char acname[10000];
 
 void Test_LCD_L0_DrawBitmap_2BPP()
 {
-	int i;
+	int i,k;
 	short index[4];
 	// return ;
 	g_lcd_test = 0;
@@ -832,19 +833,66 @@ void Test_LCD_L0_DrawBitmap_2BPP()
 
 
 	index[0] = 0xff0000;
-	index[1] = 0x00ff00;
-	index[2] = 0x0000ff;
-	index[3] = 0xf0f000;
+	index[1] = RGB16(255,0,0);
+	index[2] = RGB16(0,255,0);
+	index[3] = RGB16(0,0,255);
 	// GUI_Context.DrawMode |= LCD_DRAWMODE_TRANS;
-	for (i = 0; i < 500; i++) {
-		LCD_L0_DrawBitmap(0,0,
+	// for (i = 0; i < 500; i++) 
+	{
+		// index[2] = 0x0000ff + i;
+		// index[3] = 0xf0f000 + i;
+		LCD_L0_DrawBitmap(200,0,
 			64,64,
 			2,
 			16, 
+
 			&acpwm[0],
 			1,
 			index);
 	}
+	
+			// LCD_L0_DrawBitmap(
+			// 160,10,
+			// 124,20,
+			// 2,
+			// 31,
+			// &acname[0],
+			// 1,
+			// &index[0]);
+			// while(1);
+	for (k = 0; k < 0; k++) {
+		for (i = 0; i < 60; i++) {
+			index[2] = RGB16(0,255-i*2,0);
+			index[3] = RGB16(0,0,255-i*2);
+			LCD_L0_DrawBitmap(200,0,
+				64,64,
+				2,
+				16, 
+				&acpwm[0],
+				1,
+				index);
+			Delay_ms(40);
+		}
+		for (i = 0; i < 60; i++) {
+			index[2] = RGB16(0,255-60*2+i*2,0);
+			index[3] = RGB16(0,0,255-60*2+i*2);
+			LCD_L0_DrawBitmap(200,0,
+				64,64,
+				2,
+				16, 
+				&acpwm[0],
+				1,
+				index);
+			Delay_ms(40);
+		}
+	}
+
+	GUI_SetColor(RGB16(255, 0, 0));
+	for (k = 0; k < 100;k++) {
+		// LCD_L0_DrawHLine(k, 0, 200);
+		LCD_L0_FillRect(0, 0, 320, 240);
+	}
+	Delay_ms(1000);
 	printf("end %d\n", g_lcd_test);
 }
 int main(void)
@@ -922,9 +970,9 @@ int main(void)
 	// while (1) 
 	{
 		Ctrl_LaserPower(CTRL_LASER_HV);
-		Delay_ms(200);
+		// Delay_ms(200);
 		Ctrl_LaserPower(CTRL_LASER_MV);
-		Delay_ms(200);
+		// Delay_ms(200);
 		Ctrl_LaserPower(CTRL_LASER_LV);
 		// Delay_ms(200);
 
@@ -968,7 +1016,8 @@ int main(void)
 	
 
 	GUI_Init();
-
+	ShowLogo();
+	
 	g_en = 1;
 	TP_Init();
 	TP_EINT();
@@ -977,7 +1026,7 @@ int main(void)
 	// TC_Adj();
 	// Delay_ms(1000);
 	FLASH_Configuration();
-	TC_Test();
+	//TC_Test();
 	
 	//while(1);
 	
@@ -987,14 +1036,17 @@ int main(void)
 	BUTTON_SetDefaultBkColor(COL_BUTTON_BK, 1);
 	BUTTON_SetDefaultTextColor(COL_ENABLE, 0);
 	BUTTON_SetDefaultTextColor(COL_FOCUS, 1);
+	
 	hMain = MainTask();
 	hleft = DestopBtn_Create(WM_HBKWIN, hMain);
 
 	// MESSAGEBOX_Create("fds","df",GUI_MB_OK);
 	while(1) {
+		
+		
 		if (glide.en == 1) {
 			GUI_RECT rect;
-
+			
 			// while(glide.s_x != glide.e_x) {
 			// 	glide.s_x += glide.d_x;
 			// 	glide.s_y += glide.d_y;
@@ -1015,6 +1067,15 @@ int main(void)
  			printf("after %d\n", rect.x0);
 			// GUI_Exec();
 			glide.en = 0;
+
+			// WM_MoveTo(hMain, 200,0);
+			// glide.d1_x = -10;
+			// glide.d1_y = 0;
+			// glide.d1_loop = 8;
+			// glide.d2_x = -2;
+			// glide.d2_y = 0;
+			// glide.d2_loop = 10;
+			// glide.en = 0;
 		}
 		// return 0;
 	}
