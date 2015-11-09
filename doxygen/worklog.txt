@@ -1,4 +1,9 @@
 2015-11-4: MenglongWoo
+    - Add 完成小黄人翘臀Logo ^-^
+    - Bug _DrawBitLine2BPP显示某些图片不完整，修改驱动
+    - BUG 显示小黄人动态Logo后Wp崩溃
+
+2015-11-4: MenglongWoo
     - <h3>完成优化ucgui SSD1963驱动关键部分代码</h3>    
     - SSD1963 图像处理器特质驱动优化部分包括
         - 新增 LCD_Area 
