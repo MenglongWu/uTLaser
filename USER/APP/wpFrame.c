@@ -21,27 +21,9 @@ Purpose	 : Demonstrates a owner drawn list box
 
 
 
-static const GUI_COLOR Colors[] = { 0x000000, 0xFFFFFF };
+static GUI_COLOR Colors[] = { 0x000000, 0xFFFFFF };
 static const GUI_LOGPALETTE Palette = { 2, 1, Colors };
 
-/*   Palette
-The following are the entries of the palette table.
-Every entry is a 32-bit value (of which 24 bits are actually used)
-the lower   8 bits represent the Red component,
-the middle  8 bits represent the Green component,
-the highest 8 bits (of the 24 bits used) represent the Blue component
-as follows:   0xBBGGRR
-*/
-
-const GUI_COLOR ColorsOFF[] = {
-     0x000000,0xFFFFFF
-};
-
-const GUI_LOGPALETTE PalOFF = {
-  2,	/* number of entries */
-  0, 	/* No transparency */
-  &ColorsOFF[0]
-};
 
 const unsigned char acOFF[] = {
   ________, ________, ________, ________, ________, ________, ________, ________,
@@ -278,7 +260,7 @@ void OnPerPowerClick(WM_MESSAGE * pMsg)
 	case 0:
 		Ctrl_PeripheralPower(CTRL_PP_OFF);
 		BUTTON_SetBitmapEx(hButton1, 0, &bm_1bpp_OFF, 36, 36);
-		
+	
 		color = COL_DISABLE;
 		sg_bppdown = 1;
 		pp = 1;

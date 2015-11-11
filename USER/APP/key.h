@@ -20,5 +20,6 @@ void Delay_ms(uint16_t ms);
 int8_t KeyPress(GPIO_TypeDef* GPIOx,uint16_t kpin);
 int8_t KeyDown(GPIO_TypeDef* GPIOx,uint16_t kpin);
 int16_t KeyDown_Ex(GPIO_TypeDef* GPIOx,uint16_t kpin);
+extern volatile uint16_t g_delay_ms;
 #endif
 

@@ -64,26 +64,31 @@ static int move = 0;
 extern struct wm_glide glide;
 static void OnLeftClick(WM_MESSAGE * pMsg)
 {
-  // WM_HWIN hWin;
-  // hWin = WM_GetDialogItem(pMsg->hWin, GUI_ID_LEFT);;
-  // BUTTON_SetText(hWin, "dddf");
-  // WM_HideWindow(this);
-  // GUI_EndDialog(this,0);
-  
-  if (move < -100) {
+  GUI_RECT rect;
+
+  WM_GetWindowRectEx(hMain, &rect);
+
+  if (glide.en == 1) {
     return ;
   }
-  move -= 100;
-  glide.d1_x = -20;
+  if (rect.x1 <= 200) {
+    return ;
+  }
+  
+  // if (move < -100) {
+  //   return ;
+  // }
+  // move -= 100;
+  glide.d1_x = -10;
   glide.d1_y = 0;
-  glide.d1_loop = 3;
+  glide.d1_loop = 8;
   glide.d2_x = -2;
   glide.d2_y = 0;
   glide.d2_loop = 10;
 
-  glide.d1_x = -100;
-  glide.d1_loop = 1;
-  glide.d2_loop = 0;
+  // glide.d1_x = -100;
+  // glide.d1_loop = 1;
+  // glide.d2_loop = 0;
   
   glide.hWin = hMain;
   glide.en = 1;
@@ -94,22 +99,32 @@ static void OnLeftClick(WM_MESSAGE * pMsg)
 
 static void OnRightClick(WM_MESSAGE * pMsg)
 {
-  if (move >= 0) {
+  GUI_RECT rect;
+
+  WM_GetWindowRectEx(hMain, &rect);
+  if (glide.en == 1) {
     return ;
   }
-  move += 100;
+  printf("rect.x0 %d\n", rect.x0);
+  if (rect.x0 >= 0) {
+    return ;
+  }
+  // if (move >= 0) {
+  //   return ;
+  // }
+  // move += 100;
 
-  glide.d1_x = 20;
+  glide.d1_x = 10;
   glide.d1_y = 0;
-  glide.d1_loop = 3;
-  glide.d2_x = 2;
+  glide.d1_loop = 8;
+  glide.d2_x = 1;
   glide.d2_y = 0;
-  glide.d2_loop = 10;
+  glide.d2_loop = 20;
 
 
-  glide.d1_x = 100;
-  glide.d1_loop = 1;
-  glide.d2_loop = 0;
+  // glide.d1_x = 100;
+  // glide.d1_loop = 1;
+  // glide.d2_loop = 0;
 
   glide.hWin = hMain;
   glide.en = 1;
@@ -123,14 +138,14 @@ static void Init_Ctrl(WM_MESSAGE * pMsg)
 
   hDlg = pMsg->hWin;
   hButton = WM_GetDialogItem(hDlg, GUI_ID_LEFT);
-  BUTTON_SetTextColor(hButton, 1, COL_DISABLE);
+  BUTTON_SetTextColor(hButton, 0, COL_DISABLE);
   BUTTON_SetBkColor(hButton, 1, COL_DIALOG_BK);
   BUTTON_SetBkColor(hButton, 0, COL_DIALOG_BK);
 
   hButton = WM_GetDialogItem(hDlg, GUI_ID_RIGHT);
   BUTTON_SetBkColor(hButton, 1, COL_DIALOG_BK);
   BUTTON_SetBkColor(hButton, 0, COL_DIALOG_BK);
-  BUTTON_SetTextColor(hButton, 1, COL_DISABLE);
+  BUTTON_SetTextColor(hButton, 0, COL_DISABLE);
 }
 /*********************************************************************
 *

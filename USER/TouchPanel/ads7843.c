@@ -271,7 +271,7 @@ void EXTI0_IRQHandler(void)
 	int a,b;
 	if(EXTI_GetITStatus(EXTI_Line0) != RESET)
 	{
-		Ctrl_RedLight(1);
+		// Ctrl_RedLight(1);
 	 	if (TP_IsPress()) {
 	 		g_touch_ms = 40;
 	 	}
