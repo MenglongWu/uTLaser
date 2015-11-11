@@ -31,3 +31,23 @@
     调节ShowLogo位置，放在g_en = 1;之前，也就是在显示Logo时候不允许中断调用GUI_Exec();
 */
 
+
+/*! \page Bug-2051109-2 Bug-2051111-1-N : 
+    GUI_DispStringAt显示字符串出现“乱点”
+    
+    \code {.cpp}
+    snprintf(strout, 60, "%s\n%s", TARGET_NAME, RELEASE_DATE);
+    GUI_DispStringAt(strout, 0, 210); 
+    \endcode
+
+    处理方式，将坐标点改成10就得了，应该是_DrawBitLine1BPP优化的问题
+    \code {.cpp}
+    snprintf(strout, 60, "%s\n%s", TARGET_NAME);
+    GUI_DispStringAt(strout, 10, 210); 
+    snprintf(strout, 60, "%s",  RELEASE_DATE);
+    GUI_DispStringAt(strout, 10, 218); 
+    \endcode
+    
+    
+*/
+
