@@ -156,8 +156,8 @@ uint32_t InputPanel(int8_t *str,uint32_t len,uint32_t *outLen);
 
 
 //启动版本信息
-#define TARGET_NAME		"G-LINK TS100 VEX1.3.4"    		//目标板名称
-#define RELEASE_DATE	"Release Date 2015.08.20"				//修改发布时间
+#define TARGET_NAME		"uTLaser V1.0.1"    		//目标板名称
+#define RELEASE_DATE	"Release Date 2015.11.11"				//修改发布时间
 
 #endif
 

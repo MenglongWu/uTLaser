@@ -915,6 +915,7 @@ int main(void)
 	
 	printf("\n\n----------------------------------------------------------------------------\n");
 	printf("        GLink uTLaser Runing\n");
+	printf("%s\n%s\n", TARGET_NAME, RELEASE_DATE);
 
 #define SYSCLK_FREQ_72MHz
 	SystemInit();//SetSysClock();
@@ -981,9 +982,9 @@ int main(void)
 		Ctrl_APD(CTRL_APD_40V);
 		// Delay_ms(1000);
 	}
+#ifdef _DEBUG_
 	{
 		int i;
-
 		LCD_Clear(RGB(255, 0, 0));
 		g_lcd_test = 0;
 		printf("start ...\n");
@@ -1006,13 +1007,7 @@ int main(void)
 		
 		
 	}
-	
-	
-	printf("Draw UI\n");
-	//LCD_DrawMain();
-	// powerDownDelayCnt=0;
-	// g_batter_delay = 10001;	
-
+#endif
 	
 
 	GUI_Init();
