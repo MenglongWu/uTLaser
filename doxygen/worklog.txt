@@ -1,3 +1,7 @@
+2015-11-11: MenglongWoo
+    - BUG GUI_DispStringAt显示字符串出现“乱点”
+    - Add 添加版本信息
+
 2015-11-4: MenglongWoo
     - Add 完成小黄人翘臀Logo ^-^
     - Bug _DrawBitLine2BPP显示某些图片不完整，修改驱动
