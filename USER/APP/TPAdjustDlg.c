@@ -233,7 +233,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 			// GUI_EndDialog(this, 1);
 			if (CheckAdj(adj) ) {
 				GUI_DispStringAt("----OK----\nTouch adjust success", LCD_XSIZE_TFT / 2-40, LCD_YSIZE_TFT / 2);
-				tp_adj(pt, adj, &g_env.adj_tp);
+				tp_adj((struct point *)pt, adj, &g_env.adj_tp);
 				
 				g_env.flag = 0xaabbccdd;
 				WriteFlash(FLASH_PAGE_START, 

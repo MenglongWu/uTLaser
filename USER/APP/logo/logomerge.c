@@ -69,7 +69,7 @@ void ShowLogo()
 
 
 	
-	
+	Delay_ms(10);
 	LCD_L0_DrawBitmap(
 			66,76,
 			64,64,
@@ -88,32 +88,33 @@ void ShowLogo()
 			&Colorsname[0]);
 	
 	snprintf(strout, 60, "%s\n%s", TARGET_NAME);
-	GUI_DispStringAt(strout, 10, 210); 
-	snprintf(strout, 60, "%s",  RELEASE_DATE);
 	GUI_DispStringAt(strout, 10, 218); 
+	snprintf(strout, 60, "%s",  RELEASE_DATE);
+	GUI_DispStringAt(strout, 10, 226); 
 
+	
 	snprintf(strout, 60, "Come on everyone.Follow me.");
 	GUI_DispStringAt(strout, 70, 140); 
-	Delay_ms(1400);
+	Delay_ms(1300);
 	snprintf(strout, 60, "Put your hands down        ");
 	GUI_DispStringAt(strout, 70, 140); 
-	Delay_ms(1000);
+	Delay_ms(1300);
 	snprintf(strout, 60, "and show your buttocks");
 	GUI_DispStringAt(strout, 70, 140); 
-	Delay_ms(1000);
+	Delay_ms(1300);
 
 	// 显示 three,two,one	 嘿喂狗
 	snprintf(strout, 60, "three,                                     ");
 	GUI_DispStringAt(strout, 70, 140); 
-	Delay_ms(500);
+	Delay_ms(600);
 	snprintf(strout, 60, "three,two,");
 	GUI_DispStringAt(strout, 70, 140); 
-	Delay_ms(500);
+	Delay_ms(600);
 
 
 	snprintf(strout, 60, "three,two,one");
 	GUI_DispStringAt(strout, 70, 140); 
-	Delay_ms(500);
+	Delay_ms(600);
 	Colorshwg[0] = 0;//RGB565(0,0,0);
 	Colorshwg[1] = -1;//RGB565(255,255,255);
 
