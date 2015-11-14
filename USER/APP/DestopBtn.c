@@ -117,9 +117,9 @@ static void OnRightClick(WM_MESSAGE * pMsg)
   glide.d1_x = 10;
   glide.d1_y = 0;
   glide.d1_loop = 8;
-  glide.d2_x = 1;
+  glide.d2_x = 2;
   glide.d2_y = 0;
-  glide.d2_loop = 20;
+  glide.d2_loop = 10;
 
 
   // glide.d1_x = 100;
