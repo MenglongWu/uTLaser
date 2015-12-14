@@ -6,5 +6,7 @@
 *.bak
 MDK-ARM/Output
 Desktop.ini
-
+*.o.cmd
+*.ko.cmd
+*.mod.o.cmd
 # MDK-ARM

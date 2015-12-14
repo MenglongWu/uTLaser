@@ -164,6 +164,7 @@ int WM_HandlePID(void) {
        * Note that we may have to send 2 touch messages.
        */
       if (WM_PID__StateLast.Pressed | StateNew.Pressed) {    /* Only if pressed or just released */
+        DockDrop(NULL);
         Msg.MsgId = WM_TOUCH;
         r = 1;
         /*

@@ -200,7 +200,43 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   {BUTTON_CreateIndirect,  "Test",            GUI_ID_DELETE,   92,155 - 7,66,66},
 	// {BUTTON_CreateIndirect,	 "Test",						GUI_ID_DELETE,	 162,155 - 7,136,66},
 };
+int lock = 0;
+void DockDrop(WM_MESSAGE *pMsg)
+{
+  static GUI_PID_STATE plast, pnew;
 
+  
+  GUI_PID_GetState(&pnew);
+  // printf("%d %d %d\n", pnew.x, pnew.y, pnew.Pressed);
+
+  if (plast.Pressed == 0 && pnew.Pressed == 1) {
+    plast = pnew;//plast.Pressed = 3;
+  }
+  else {
+    printf("touch up\n");
+    
+    printf("dat x  %d dat y  %d\n", pnew.x - plast.x, pnew.y - plast.y);
+    // if (pnew.x - plast.x >= 10 || plast.x - pnew.x >= 10) {
+    WM_MoveWindow(this, pnew.x - plast.x, 0);
+    lock = 1;
+    if (pnew.x - plast.x < 10 || plast.x - pnew.x < 10) {
+      lock = 0;
+    }
+      plast = pnew;
+      
+    //   lock = 1;
+    // }
+    // else {
+    //   lock = 0;
+    // }
+    
+    
+    // WM_MoveWindow(hMain, 30,0);
+  }
+  
+
+
+}
 void TurnBack(WM_HWIN	hWin)
 {
 	printf("%d", WM_GetWindowOrgY(hWin));
@@ -230,12 +266,16 @@ static void _cbBkWindow(WM_MESSAGE* pMsg)
 
 	switch (pMsg->MsgId) {
 	case WM_PAINT:
-		GUI_SetBkColor(COL_DIALOG_BK);
+		// GUI_SetBkColor(COL_DIALOG_BK);
+    GUI_SetBkColor(COL_DISABLE);
 		GUI_Clear();
 		// GUI_SetColor(GUI_WHITE);
 		// GUI_SetFont(&GUI_Font24_ASCII);
 		// GUI_DispStringHCenterAt("WIDGET_ListBoxOwnerDraw", 160, 5);
 		break;
+  case WM_TOUCH:
+    // DockDrop(pMsg);
+    break;
 	default:
 		WM_DefaultProc(pMsg);
 	}
@@ -519,6 +559,7 @@ static void _cbCallback2(WM_MESSAGE * pMsg) {
 		// Init_Ctrl(pMsg);
 
 		break;
+
 	default:
 		WM_DefaultProc(pMsg);
 	}
@@ -683,16 +724,22 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
 		Init_Ctrl(pMsg);
 	case WM_TOUCH:
-		WM_MoveWindow(this, 100, 100);
-		printf("touch \n");
-		TurnBack(this);
-		break;
+    // DockDrop(pMsg);
+		// WM_MoveWindow(this, 100, 100);
+		// printf("touch \n");
+		// TurnBack(this);
+    break;
 
 	case WM_NOTIFY_PARENT:
+    // DockDrop(pMsg);
+    if (lock == 1) {      
+      break;
+    }
 		Id = WM_GetId(pMsg->hWinSrc);
 		NCode = pMsg->Data.v;		
 		switch(NCode) {
-		case WM_NOTIFICATION_CLICKED:
+		// case WM_NOTIFICATION_CLICKED:
+    case WM_NOTIFICATION_RELEASED:
 
 			Id = WM_GetId(pMsg->hWinSrc);
 			WM_SetFocus(pMsg->hWinSrc);

@@ -168,8 +168,8 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
     FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
     FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
     Init_Ctrl(pMsg);
-  // case WM_TOUCH:
-    
+  case WM_TOUCH:
+      DockDrop(pMsg);
   //   if (getlogxy(&touch)) {
       
   //     sprintf(strout, "logic %d %d", touch.x, touch.y);
@@ -182,7 +182,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
   //     TEXT_SetText(hWin, strout);
   //   }
     
-  //   break;
+    break;
   // case WM_PAINT:
   //   for (i = 0; i < sizeof(pt)/ sizeof(struct point); i++) {
   //     GUI_FillRect(pt[i].x, pt[i].y, pt[i].x + 2, pt[i].y + 2);
