@@ -180,7 +180,7 @@ static WM_HWIN this = 0;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	// { FRAMEWIN_CreateIndirect,  "Owner drawn list box", 0,          0,  0, 320, 220 , FRAMEWIN_CF_MOVEABLE },
-  { FRAMEWIN_CreateIndirect,  "Owner drawn list box", 0,          0,  0, 380, 220 , FRAMEWIN_CF_MOVEABLE },
+  { FRAMEWIN_CreateIndirect,  "Owner drawn list box", 0,          0,  0, 420, 220 , FRAMEWIN_CF_MOVEABLE },
 	//	 { LISTBOX_CreateIndirect,	 0,						 GUI_ID_MULTIEDIT0,	10,	10, 100, 100, 0, 100 },
 	// /* Check box for multi select mode */
 	//	 { CHECKBOX_CreateIndirect,	0,						 GUI_ID_CHECK0,	 120,	10,	 0,	 0 },
@@ -205,66 +205,57 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 int lock = 0;
 
 extern struct wm_glide glide;
-void DockDrop(WM_MESSAGE *pMsg)
+int DockDrop(WM_MESSAGE *pMsg)
 {
   GUI_RECT rect;
   static GUI_PID_STATE plast, pnew;
+  static unsigned long tmlast = 0,tmnow = 0;
   // return ;
   
   GUI_PID_GetState(&pnew);
-  // printf("%d %d %d\n", pnew.x, pnew.y, pnew.Pressed);
+  printf("[%d %d %d %d]\n", tmlast, pnew, plast.Pressed, pnew.Pressed);
 
   if (plast.Pressed == 0 && pnew.Pressed == 1) {
     plast = pnew;//plast.Pressed = 3;
+    tmlast = GUI_X_GetTime();
   }
   else if (plast.Pressed == 1 && pnew.Pressed == 1) {
     printf("touch up\n");
     
     printf("dat x  %d dat y  %d\n", pnew.x - plast.x, pnew.y - plast.y);
-    // if (pnew.x - plast.x >= 10 || plast.x - pnew.x >= 10) {
-
-    WM_MoveWindow(this, pnew.x - plast.x, 0);
-    plast = pnew;
-
-    // if (plast.Pressed == 0 && pnew.Pressed == 0) {
-      
-
-      
-      // if (glide.en == 1) {
-      //   return ;
-      // }
-
-      
-    // }
-      
+    // if (pnew.x - plast.x > 2 || plast.x - pnew.x > 2) {
+      WM_MoveWindow(this, pnew.x - plast.x, 0);
+      plast = pnew;
+      return 1;
   }
   else if(plast.Pressed == 1 && pnew.Pressed == 0) {
     plast = pnew;
     WM_GetWindowRectEx(this, &rect);
     printf("%d %d \n", rect.x0, rect.x1);
+    tmnow = GUI_X_GetTime();
     if (rect.x0 > 0) {
       glide.s_x = rect.x0;
       glide.s_y = rect.y0;
 
-      glide.d1_x = (0 - glide.s_x) / 10;
+      glide.d1_x = (0 - glide.s_x) / 5;
       glide.d1_y = 0;
-      glide.d1_loop = 10;
+      glide.d1_loop = 5;
       glide.d2_loop = 0;
 
-      glide.e_x = -10;
+      glide.e_x = 0;
       glide.e_y = 0;
 
       glide.hWin = this;
       glide.en = 1;
-      return ;
+      return 1;
     }
     else if (rect.x1 < 320) {
       glide.s_x = rect.x0;
       glide.s_y = rect.y0;
 
-      glide.d1_x = (320 - rect.x1) / 10;
+      glide.d1_x = (320 - rect.x1) / 5;
       glide.d1_y = 0;
-      glide.d1_loop = 10;
+      glide.d1_loop = 5;
       glide.d2_loop = 0;
 
       glide.e_x = (320 - (rect.x1 - rect.x0));
@@ -272,9 +263,14 @@ void DockDrop(WM_MESSAGE *pMsg)
 
       glide.hWin = this;
       glide.en = 1;
-      return ;
+      return 1;
+    }
+
+    if (tmnow - tmlast > 200) {
+      return 1;
     }
   }
+  return 0;
   
 
 
@@ -787,7 +783,10 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
     break;
 
 	case WM_NOTIFY_PARENT:
-    // DockDrop(pMsg);
+    // if (DockDrop(pMsg)) {
+    //   break;
+    // }
+
     if (lock == 1) {      
       break;
     }
@@ -853,27 +852,27 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 
 
 
-		GUI_PID_GetState(&state);
+		// GUI_PID_GetState(&state);
 
-		if (state.Pressed == 1) {
-			if (fpress == 0) {
-				fpress = 1;
-				y0 = state.y;
-				WM_GetWindowRectEx(pMsg->hWin, &rect);
-				break;
-			}
-			else {
-				WM_MoveTo(pMsg->hWin, 0, rect.y0 + state.y - y0 );
-			}
-			sprintf(strout,"%d %d[%d] [%d] %d\n%d %d %d",state.x,state.y,state.Pressed, fpress,
-				rect.y0 + state.y - y0 ,
-				rect.y0, state.y , y0);
-			GUI_DispStringAt(strout, 0, 10); // 显示文本
-		}
-		else {
-			fpress = 0;
-			TurnBack(pMsg->hWin);
-		}
+		// if (state.Pressed == 1) {
+		// 	if (fpress == 0) {
+		// 		fpress = 1;
+		// 		y0 = state.y;
+		// 		WM_GetWindowRectEx(pMsg->hWin, &rect);
+		// 		break;
+		// 	}
+		// 	else {
+		// 		WM_MoveTo(pMsg->hWin, 0, rect.y0 + state.y - y0 );
+		// 	}
+		// 	sprintf(strout,"%d %d[%d] [%d] %d\n%d %d %d",state.x,state.y,state.Pressed, fpress,
+		// 		rect.y0 + state.y - y0 ,
+		// 		rect.y0, state.y , y0);
+		// 	GUI_DispStringAt(strout, 0, 10); // 显示文本
+		// }
+		// else {
+		// 	fpress = 0;
+		// 	TurnBack(pMsg->hWin);
+		// }
 
 
 
