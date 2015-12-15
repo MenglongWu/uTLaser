@@ -1,3 +1,9 @@
+2015-12-15: MenglongWoo
+    - Test 拦截ucgui触屏消息添加触屏长按失败，效果不理想，不能有效的在触屏抬起后中断所有触屏事件，暂时放弃
+    - Change struct wm_glide添加两组变量（起始坐标和截止坐标）
+    - Add 添加主面板自动回归特效
+    - Del 去除桌面按钮
+
 2015-12-14: MenglongWoo
     - Add 初步测试触屏拖拽功能，其中修改ucgui的WMTouch.c，但有误触其他button现象，希望做成手机的体验
 

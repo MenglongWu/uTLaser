@@ -50,8 +50,10 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   // /* Buttons */
   //   { BUTTON_CreateIndirect, "OK",           GUI_ID_OK,     120, 65, 80, 20 },
   //   { BUTTON_CreateIndirect, "Cancel",         GUI_ID_CANCEL,   120, 90, 80, 20 },
-  {BUTTON_CreateIndirect,  "<",           GUI_ID_LEFT,  0,0,40,20},
-  {BUTTON_CreateIndirect,  ">",           GUI_ID_RIGHT,  320-40,0,40,20},
+  
+  // {BUTTON_CreateIndirect,  "<",           GUI_ID_LEFT,  0,0,40,20},
+  // {BUTTON_CreateIndirect,  ">",           GUI_ID_RIGHT,  320-40,0,40,20},
+
   // {BUTTON_CreateIndirect,   "PWM\r\nNormal",     GUI_ID_PWM_REVERSAL,   162,85,66,66},
   // {BUTTON_CreateIndirect,   "1us",           GUI_ID_PWM_WIDTH,  232,85,66,66},
   // {BUTTON_CreateIndirect,   "Laster",            GUI_ID_LASTER,   22,155,66,66},
@@ -79,6 +81,8 @@ static void OnLeftClick(WM_MESSAGE * pMsg)
   //   return ;
   // }
   // move -= 100;
+  glide.s_x = rect.x0;
+  glide.s_y = rect.y0;
   glide.d1_x = -10;
   glide.d1_y = 0;
   glide.d1_loop = 8;
@@ -86,6 +90,8 @@ static void OnLeftClick(WM_MESSAGE * pMsg)
   glide.d2_y = 0;
   glide.d2_loop = 10;
 
+  glide.e_x = rect.x0 + glide.d1_x*glide.d1_loop + glide.d2_x * glide.d2_loop;
+  glide.e_y = rect.y0 + glide.d1_y*glide.d1_loop + glide.d2_y * glide.d2_loop;
   // glide.d1_x = -100;
   // glide.d1_loop = 1;
   // glide.d2_loop = 0;
@@ -113,6 +119,8 @@ static void OnRightClick(WM_MESSAGE * pMsg)
   //   return ;
   // }
   // move += 100;
+  glide.s_x = rect.x0;
+  glide.s_y = rect.y0;
 
   glide.d1_x = 10;
   glide.d1_y = 0;
@@ -122,6 +130,8 @@ static void OnRightClick(WM_MESSAGE * pMsg)
   glide.d2_loop = 10;
 
 
+  glide.e_x = rect.x0 + glide.d1_x*glide.d1_loop + glide.d2_x * glide.d2_loop;
+  glide.e_y = rect.y0 + glide.d1_y*glide.d1_loop + glide.d2_y * glide.d2_loop;
   // glide.d1_x = 100;
   // glide.d1_loop = 1;
   // glide.d2_loop = 0;

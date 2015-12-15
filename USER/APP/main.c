@@ -183,7 +183,7 @@ int main(void)
 	
 
 	GUI_Init();
-	ShowLogo();
+	// ShowLogo();
 	
 	g_en = 1;
 	TP_Init();
@@ -218,6 +218,7 @@ int main(void)
 			// 	glide.s_x += glide.d_x;
 			// 	glide.s_y += glide.d_y;
 				// WM_MoveTo(hMain, glide.s_x,0);
+			WM_MoveTo(hMain, glide.s_x, glide.s_y);
 			while(glide.d1_loop > 0) {
 				WM_MoveWindow(hMain, glide.d1_x, glide.d1_y);
 				// printf("%d \n", glide.d1_loop);
@@ -231,7 +232,9 @@ int main(void)
 				glide.d2_loop--;
 				Delay_ms(30);
 			}
+			WM_MoveTo(hMain, glide.e_x, glide.e_y);
  			printf("after %d\n", rect.x0);
+
 			// GUI_Exec();
 			glide.en = 0;
 
