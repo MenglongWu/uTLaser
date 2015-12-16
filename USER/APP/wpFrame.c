@@ -205,6 +205,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 int lock = 0;
 
 extern struct wm_glide glide;
+int is_press = 0;
 int DockDrop(WM_MESSAGE *pMsg)
 {
   GUI_RECT rect;
@@ -226,6 +227,7 @@ int DockDrop(WM_MESSAGE *pMsg)
     // if (pnew.x - plast.x > 2 || plast.x - pnew.x > 2) {
       WM_MoveWindow(this, pnew.x - plast.x, 0);
       plast = pnew;
+      // is_press = 1;
       return 1;
   }
   else if(plast.Pressed == 1 && pnew.Pressed == 0) {
@@ -247,6 +249,12 @@ int DockDrop(WM_MESSAGE *pMsg)
 
       glide.hWin = this;
       glide.en = 1;
+      // is_press = 0;
+      is_press = 1;
+      if (tmnow - tmlast > 200) {
+        is_press = 1;
+        return 1;
+      }
       return 1;
     }
     else if (rect.x1 < 320) {
@@ -263,13 +271,21 @@ int DockDrop(WM_MESSAGE *pMsg)
 
       glide.hWin = this;
       glide.en = 1;
+      // is_press = 0;
+      is_press = 1;
+      if (tmnow - tmlast > 200) {
+        is_press = 1;
+        return 1;
+      }
       return 1;
     }
 
     if (tmnow - tmlast > 200) {
+      is_press = 1;
       return 1;
     }
   }
+  is_press = 0;
   return 0;
   
 
@@ -795,7 +811,9 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		switch(NCode) {
 		// case WM_NOTIFICATION_CLICKED:
     case WM_NOTIFICATION_RELEASED:
-
+      if (is_press == 1) {
+        break;
+      }
 			Id = WM_GetId(pMsg->hWinSrc);
 			WM_SetFocus(pMsg->hWinSrc);
 			switch (Id) {
