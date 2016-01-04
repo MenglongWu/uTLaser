@@ -112,7 +112,7 @@ static void OnRightClick(WM_MESSAGE * pMsg)
     return ;
   }
   printf("rect.x0 %d\n", rect.x0);
-  if (rect.x0 >= 0) {
+  if (rect.x0 > 0) {
     return ;
   }
   // if (move >= 0) {
