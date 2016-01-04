@@ -55,114 +55,6 @@ uTlaser 公司内部使用的光器件测试平台，包括测试连续激光器
 #endif
 
 
-int g_lcd_test = 0;
-
-
-struct wm_glide glide;
-extern volatile uint32_t g_en ,g_tickgui ;
-extern WM_HWIN hdlg;
-extern const unsigned char acOFF[512];
-extern GUI_CONST_STORAGE unsigned char acpwm[1024];
-#include "../uCGUI/GUI/Core/GUI_Protected.h"
-void Test_LCD_L0_DrawBitmap_1BPP()
-{
-	int i;
-	short index[2];
-
-	g_lcd_test = 0;
-	printf("----Test_LCD_L0_DrawBitmap_1BPP----");
-	printf("start ...\n");
-
-	index[0] = 0xff0000;
-	index[1] = 0x00ff00;
-	GUI_Context.DrawMode |= LCD_DRAWMODE_TRANS;
-	for (i = 0; i < 1000; i++) {
-		LCD_L0_DrawBitmap(0,0,
-			64,64,
-			1,
-			8, 
-			&acOFF[0],
-			0,
-			index);
-	}
-	printf("end %d\n", g_lcd_test);
-}
-extern GUI_CONST_STORAGE unsigned char acname[10000];
-
-void Test_LCD_L0_DrawBitmap_2BPP()
-{
-	int i,k;
-	short index[4];
-	// return ;
-	g_lcd_test = 0;
-	printf("----Test_LCD_L0_DrawBitmap_2BPP----");
-	printf("start ...\n");
-
-
-	index[0] = 0xff0000;
-	index[1] = RGB16(255,0,0);
-	index[2] = RGB16(0,255,0);
-	index[3] = RGB16(0,0,255);
-	// GUI_Context.DrawMode |= LCD_DRAWMODE_TRANS;
-	// for (i = 0; i < 500; i++) 
-	{
-		// index[2] = 0x0000ff + i;
-		// index[3] = 0xf0f000 + i;
-		LCD_L0_DrawBitmap(200,0,
-			64,64,
-			2,
-			16, 
-
-			&acpwm[0],
-			1,
-			index);
-	}
-	
-			// LCD_L0_DrawBitmap(
-			// 160,10,
-			// 124,20,
-			// 2,
-			// 31,
-			// &acname[0],
-			// 1,
-			// &index[0]);
-			// while(1);
-	for (k = 0; k < 0; k++) {
-		for (i = 0; i < 60; i++) {
-			index[2] = RGB16(0,255-i*2,0);
-			index[3] = RGB16(0,0,255-i*2);
-			LCD_L0_DrawBitmap(200,0,
-				64,64,
-				2,
-				16, 
-				&acpwm[0],
-				1,
-				index);
-			Delay_ms(40);
-		}
-		for (i = 0; i < 60; i++) {
-			index[2] = RGB16(0,255-60*2+i*2,0);
-			index[3] = RGB16(0,0,255-60*2+i*2);
-			LCD_L0_DrawBitmap(200,0,
-				64,64,
-				2,
-				16, 
-				&acpwm[0],
-				1,
-				index);
-			Delay_ms(40);
-		}
-	}
-
-	GUI_SetColor(RGB16(255, 0, 0));
-	for (k = 0; k < 100;k++) {
-		// LCD_L0_DrawHLine(k, 0, 200);
-		LCD_L0_FillRect(0, 0, 320, 240);
-	}
-	Delay_ms(1000);
-	printf("end %d\n", g_lcd_test);
-}
-
 
 
 // *****************************************************************************
@@ -171,6 +63,9 @@ void Test_LCD_L0_DrawBitmap_2BPP()
 // 2. TIM5定时器做1ms定会
 // 3. TIM6定时1ms，每10ms按键扫描、uCGUI更新界面、根据外部中断设置的定时时间到则检测触屏按压
 // 4. EXTI0 检测触屏按下事件
+struct wm_glide glide;
+extern volatile uint32_t g_en ;
+// extern WM_HWIN hdlg;
 
 int main(void)
 {
@@ -187,8 +82,11 @@ int main(void)
 	int tick = 0;
 	WM_MESSAGE msg;
 	WM_HWIN hMain, hleft,hright;
+
+	Init_LaserPower();
 	USART_Configuration();
 	Init_LED();
+
 	
 	printf("\n\n----------------------------------------------------------------------------\n");
 	printf("        GLink uTLaser Runing\n");
@@ -247,16 +145,16 @@ int main(void)
 	Init_LaserPower();
 	// while (1) 
 	{
-		Ctrl_LaserPower(CTRL_LASER_HV);
+		// Ctrl_LaserPower(CTRL_LASER_HV);
 		// Delay_ms(200);
-		Ctrl_LaserPower(CTRL_LASER_MV);
+		// Ctrl_LaserPower(CTRL_LASER_MV);
 		// Delay_ms(200);
 		Ctrl_LaserPower(CTRL_LASER_LV);
 		// Delay_ms(200);
 
 		Ctrl_APD(CTRL_APD_20V);
 		// Delay_ms(1000);
-		Ctrl_APD(CTRL_APD_40V);
+		// Ctrl_APD(CTRL_APD_40V);
 		// Delay_ms(1000);
 	}
 #ifdef _DEBUG_
@@ -288,7 +186,7 @@ int main(void)
 	
 
 	GUI_Init();
-	ShowLogo();
+	// ShowLogo();
 	
 	g_en = 1;
 	TP_Init();
@@ -323,6 +221,7 @@ int main(void)
 			// 	glide.s_x += glide.d_x;
 			// 	glide.s_y += glide.d_y;
 				// WM_MoveTo(hMain, glide.s_x,0);
+			WM_MoveTo(hMain, glide.s_x, glide.s_y);
 			while(glide.d1_loop > 0) {
 				WM_MoveWindow(hMain, glide.d1_x, glide.d1_y);
 				// printf("%d \n", glide.d1_loop);
@@ -334,9 +233,11 @@ int main(void)
 				WM_MoveWindow(hMain, glide.d2_x, glide.d2_y);
 				// printf("%d \n", glide.d2_loop);
 				glide.d2_loop--;
-				Delay_ms(10);
+				Delay_ms(30);
 			}
+			WM_MoveTo(hMain, glide.e_x, glide.e_y);
  			printf("after %d\n", rect.x0);
+
 			// GUI_Exec();
 			glide.en = 0;
 

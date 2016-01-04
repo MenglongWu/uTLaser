@@ -54,6 +54,10 @@ struct wm_glide
 {
 	WM_HWIN hWin;
 	int en;
+	int s_x;
+	int s_y;
+	int e_x;
+	int e_y;
 	int d1_x;
 	int d1_y;
 	int d1_loop;

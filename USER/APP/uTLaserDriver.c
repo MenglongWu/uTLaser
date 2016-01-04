@@ -243,8 +243,9 @@ void NVIC_Configuration(void)
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	
+	 // 优先级只有 2 组（0-1），但当前运行没有问题，当系统稳定后再处理
 	NVIC_InitStructure.NVIC_IRQChannel					 = EXTI0_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;// 这一句有问题，
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -441,21 +442,24 @@ void Init_LaserPower()
 	GPIO_InitStructure.GPIO_Pin		= PIN_LD_OUTPUT_1;
 	GPIO_InitStructure.GPIO_Mode	= GPIO_Mode_Out_PP;
 	GPIO_Init(GROUP_LD1, &GPIO_InitStructure);
-	GPIO_SetBits(GROUP_LD1, PIN_LD_OUTPUT_1);
+	// GPIO_SetBits(GROUP_LD1, PIN_LD_OUTPUT_1);
+	GPIO_ResetBits(GROUP_LD1, PIN_LD_OUTPUT_1);
 
 	RCC_APB2PeriphClockCmd(RCC_LD2, ENABLE);
 	GPIO_InitStructure.GPIO_Speed	= GPIO_Speed_2MHz;
 	GPIO_InitStructure.GPIO_Pin		= PIN_LD_OUTPUT_2;
 	GPIO_InitStructure.GPIO_Mode	= GPIO_Mode_Out_PP;
 	GPIO_Init(GROUP_LD2, &GPIO_InitStructure);
-	GPIO_SetBits(GROUP_LD2, PIN_LD_OUTPUT_2);
+	// GPIO_SetBits(GROUP_LD2, PIN_LD_OUTPUT_2);
+	GPIO_ResetBits(GROUP_LD2, PIN_LD_OUTPUT_2);
 
 	RCC_APB2PeriphClockCmd(RCC_LD3, ENABLE);
 	GPIO_InitStructure.GPIO_Speed	= GPIO_Speed_2MHz;
 	GPIO_InitStructure.GPIO_Pin		= PIN_LD_OUTPUT_3;
 	GPIO_InitStructure.GPIO_Mode	= GPIO_Mode_Out_PP;
 	GPIO_Init(GROUP_LD3, &GPIO_InitStructure);
-	GPIO_SetBits(GROUP_LD3, PIN_LD_OUTPUT_3);
+	// GPIO_SetBits(GROUP_LD3, PIN_LD_OUTPUT_3);
+	GPIO_ResetBits(GROUP_LD3, PIN_LD_OUTPUT_3);
 }
 
 

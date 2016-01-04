@@ -179,7 +179,8 @@ static WM_HWIN this = 0;
 
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-	{ FRAMEWIN_CreateIndirect,	"Owner drawn list box",	0,					0,	0, 320, 220 , FRAMEWIN_CF_MOVEABLE },
+	// { FRAMEWIN_CreateIndirect,  "Owner drawn list box", 0,          0,  0, 320, 220 , FRAMEWIN_CF_MOVEABLE },
+  { FRAMEWIN_CreateIndirect,  "Owner drawn list box", 0,          0,  0, 360, 220 , FRAMEWIN_CF_MOVEABLE },
 	//	 { LISTBOX_CreateIndirect,	 0,						 GUI_ID_MULTIEDIT0,	10,	10, 100, 100, 0, 100 },
 	// /* Check box for multi select mode */
 	//	 { CHECKBOX_CreateIndirect,	0,						 GUI_ID_CHECK0,	 120,	10,	 0,	 0 },
@@ -192,7 +193,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	//	 { BUTTON_CreateIndirect,	"Cancel",					GUI_ID_CANCEL,	 120,	90,	80,	20 },
 	{BUTTON_CreateIndirect,	 "",					GUI_ID_PP,	 22,15 - 7,136,136},
 	{BUTTON_CreateIndirect,	 "APD",						GUI_ID_APD,	 162,15 - 7,66,66},
-	{BUTTON_CreateIndirect,	 "PWM",						GUI_ID_PWM,	 232,15 - 7,66,66},
+	{BUTTON_CreateIndirect,  "PWM",           GUI_ID_PWM,  232,15 - 7,66,66},
+  // {BUTTON_CreateIndirect,  "PWM",           GUI_ID_PWM,  400,15 - 7,66,66},
 	// {BUTTON_CreateIndirect,	 "PWM\r\nNormal",			GUI_ID_PWM_REVERSAL,	 162,85 - 7,66,66},
 	{BUTTON_CreateIndirect,   "1us",           GUI_ID_PWM_WIDTH,  162,85 - 7,66,66},
   {BUTTON_CreateIndirect,  "Laster",            GUI_ID_LASTER,   232,85 - 7,66,66},
@@ -200,7 +202,95 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   {BUTTON_CreateIndirect,  "Test",            GUI_ID_DELETE,   92,155 - 7,66,66},
 	// {BUTTON_CreateIndirect,	 "Test",						GUI_ID_DELETE,	 162,155 - 7,136,66},
 };
+int lock = 0;
 
+extern struct wm_glide glide;
+int is_press = 0;
+int DockDrop(WM_MESSAGE *pMsg)
+{
+  GUI_RECT rect;
+  static GUI_PID_STATE plast, pnew;
+  static unsigned long tmlast = 0,tmnow = 0;
+  // return ;
+  
+  GUI_PID_GetState(&pnew);
+  printf("[%d %d %d %d]\n", tmlast, pnew, plast.Pressed, pnew.Pressed);
+
+  if (plast.Pressed == 0 && pnew.Pressed == 1) {
+    plast = pnew;//plast.Pressed = 3;
+    tmlast = GUI_X_GetTime();
+  }
+  else if (plast.Pressed == 1 && pnew.Pressed == 1) {
+    printf("touch up\n");
+    
+    printf("dat x  %d dat y  %d\n", pnew.x - plast.x, pnew.y - plast.y);
+    // if (pnew.x - plast.x > 2 || plast.x - pnew.x > 2) {
+      WM_MoveWindow(this, pnew.x - plast.x, 0);
+      plast = pnew;
+      // is_press = 1;
+      return 1;
+  }
+  else if(plast.Pressed == 1 && pnew.Pressed == 0) {
+    plast = pnew;
+    WM_GetWindowRectEx(this, &rect);
+    printf("%d %d \n", rect.x0, rect.x1);
+    tmnow = GUI_X_GetTime();
+    if (rect.x0 > 0) {
+      glide.s_x = rect.x0;
+      glide.s_y = rect.y0;
+
+      glide.d1_x = (0 - glide.s_x) / 5;
+      glide.d1_y = 0;
+      glide.d1_loop = 5;
+      glide.d2_loop = 0;
+
+      glide.e_x = 0;
+      glide.e_y = 0;
+
+      glide.hWin = this;
+      glide.en = 1;
+      // is_press = 0;
+      is_press = 1;
+      if (tmnow - tmlast > 200) {
+        is_press = 1;
+        return 1;
+      }
+      return 1;
+    }
+    else if (rect.x1 < 320) {
+      glide.s_x = rect.x0;
+      glide.s_y = rect.y0;
+
+      glide.d1_x = (320 - rect.x1) / 5;
+      glide.d1_y = 0;
+      glide.d1_loop = 5;
+      glide.d2_loop = 0;
+
+      glide.e_x = (320 - (rect.x1 - rect.x0));
+      glide.e_y = ( 0);
+
+      glide.hWin = this;
+      glide.en = 1;
+      // is_press = 0;
+      is_press = 1;
+      if (tmnow - tmlast > 200) {
+        is_press = 1;
+        return 1;
+      }
+      return 1;
+    }
+
+    if (tmnow - tmlast > 200) {
+      is_press = 1;
+      return 1;
+    }
+  }
+  is_press = 0;
+  return 0;
+  
+
+
+}
 void TurnBack(WM_HWIN	hWin)
 {
 	printf("%d", WM_GetWindowOrgY(hWin));
@@ -230,12 +320,16 @@ static void _cbBkWindow(WM_MESSAGE* pMsg)
 
 	switch (pMsg->MsgId) {
 	case WM_PAINT:
-		GUI_SetBkColor(COL_DIALOG_BK);
+		// GUI_SetBkColor(COL_DIALOG_BK);
+    GUI_SetBkColor(COL_DISABLE);
 		GUI_Clear();
 		// GUI_SetColor(GUI_WHITE);
 		// GUI_SetFont(&GUI_Font24_ASCII);
 		// GUI_DispStringHCenterAt("WIDGET_ListBoxOwnerDraw", 160, 5);
 		break;
+  case WM_TOUCH:
+    // DockDrop(pMsg);
+    break;
 	default:
 		WM_DefaultProc(pMsg);
 	}
@@ -519,6 +613,7 @@ static void _cbCallback2(WM_MESSAGE * pMsg) {
 		// Init_Ctrl(pMsg);
 
 		break;
+
 	default:
 		WM_DefaultProc(pMsg);
 	}
@@ -583,20 +678,34 @@ static void Init_Ctrl(WM_MESSAGE * pMsg)
 
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_PP);
 	OnPerPowerClick(&msg);
+  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(25,242,123));
+  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(25,242,123));
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_APD);
+  // BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(233,24,123));
+  // BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(221,24,123));
 	OnAPDClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_PWM);
+  // BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(2,100,13));
+  // BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(2,100,13));
 	OnPWMClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_PWM_REVERSAL);
+  // BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(2,100,103));
+  // BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(2,100,103));
 	OnReversalClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_PWM_WIDTH);
+  // BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(122,100,180));
+  // BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(122,100,180));
 	OnWidthClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_LASTER);
 	OnLaserClick(&msg);
 
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_DELETE);
+  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(233,24,123));
+  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(221,24,123));
 	BUTTON_SetTextColor(msg.hWinSrc, 0, COL_ENABLE);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_SETTING);
+  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(233,24,123));
+  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(221,24,123));
 	BUTTON_SetTextColor(msg.hWinSrc, 0, COL_ENABLE);
 
 	WM_HideWindow(this);
@@ -683,17 +792,28 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 		FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
 		Init_Ctrl(pMsg);
 	case WM_TOUCH:
-		WM_MoveWindow(this, 100, 100);
-		printf("touch \n");
-		TurnBack(this);
-		break;
+    // DockDrop(pMsg);
+		// WM_MoveWindow(this, 100, 100);
+		// printf("touch \n");
+		// TurnBack(this);
+    break;
 
 	case WM_NOTIFY_PARENT:
+    // if (DockDrop(pMsg)) {
+    //   break;
+    // }
+
+    if (lock == 1) {      
+      break;
+    }
 		Id = WM_GetId(pMsg->hWinSrc);
 		NCode = pMsg->Data.v;		
 		switch(NCode) {
-		case WM_NOTIFICATION_CLICKED:
-
+		// case WM_NOTIFICATION_CLICKED:
+    case WM_NOTIFICATION_RELEASED:
+      if (is_press == 1) {
+        break;
+      }
 			Id = WM_GetId(pMsg->hWinSrc);
 			WM_SetFocus(pMsg->hWinSrc);
 			switch (Id) {
@@ -750,27 +870,27 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
 
 
 
-		GUI_PID_GetState(&state);
+		// GUI_PID_GetState(&state);
 
-		if (state.Pressed == 1) {
-			if (fpress == 0) {
-				fpress = 1;
-				y0 = state.y;
-				WM_GetWindowRectEx(pMsg->hWin, &rect);
-				break;
-			}
-			else {
-				WM_MoveTo(pMsg->hWin, 0, rect.y0 + state.y - y0 );
-			}
-			sprintf(strout,"%d %d[%d] [%d] %d\n%d %d %d",state.x,state.y,state.Pressed, fpress,
-				rect.y0 + state.y - y0 ,
-				rect.y0, state.y , y0);
-			GUI_DispStringAt(strout, 0, 10); // 显示文本
-		}
-		else {
-			fpress = 0;
-			TurnBack(pMsg->hWin);
-		}
+		// if (state.Pressed == 1) {
+		// 	if (fpress == 0) {
+		// 		fpress = 1;
+		// 		y0 = state.y;
+		// 		WM_GetWindowRectEx(pMsg->hWin, &rect);
+		// 		break;
+		// 	}
+		// 	else {
+		// 		WM_MoveTo(pMsg->hWin, 0, rect.y0 + state.y - y0 );
+		// 	}
+		// 	sprintf(strout,"%d %d[%d] [%d] %d\n%d %d %d",state.x,state.y,state.Pressed, fpress,
+		// 		rect.y0 + state.y - y0 ,
+		// 		rect.y0, state.y , y0);
+		// 	GUI_DispStringAt(strout, 0, 10); // 显示文本
+		// }
+		// else {
+		// 	fpress = 0;
+		// 	TurnBack(pMsg->hWin);
+		// }
 
 
 

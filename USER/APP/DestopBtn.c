@@ -50,8 +50,10 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   // /* Buttons */
   //   { BUTTON_CreateIndirect, "OK",           GUI_ID_OK,     120, 65, 80, 20 },
   //   { BUTTON_CreateIndirect, "Cancel",         GUI_ID_CANCEL,   120, 90, 80, 20 },
+  
   {BUTTON_CreateIndirect,  "<",           GUI_ID_LEFT,  0,0,40,20},
   {BUTTON_CreateIndirect,  ">",           GUI_ID_RIGHT,  320-40,0,40,20},
+
   // {BUTTON_CreateIndirect,   "PWM\r\nNormal",     GUI_ID_PWM_REVERSAL,   162,85,66,66},
   // {BUTTON_CreateIndirect,   "1us",           GUI_ID_PWM_WIDTH,  232,85,66,66},
   // {BUTTON_CreateIndirect,   "Laster",            GUI_ID_LASTER,   22,155,66,66},
@@ -79,6 +81,8 @@ static void OnLeftClick(WM_MESSAGE * pMsg)
   //   return ;
   // }
   // move -= 100;
+  glide.s_x = rect.x0;
+  glide.s_y = rect.y0;
   glide.d1_x = -10;
   glide.d1_y = 0;
   glide.d1_loop = 8;
@@ -86,6 +90,8 @@ static void OnLeftClick(WM_MESSAGE * pMsg)
   glide.d2_y = 0;
   glide.d2_loop = 10;
 
+  glide.e_x = rect.x0 + glide.d1_x*glide.d1_loop + glide.d2_x * glide.d2_loop;
+  glide.e_y = rect.y0 + glide.d1_y*glide.d1_loop + glide.d2_y * glide.d2_loop;
   // glide.d1_x = -100;
   // glide.d1_loop = 1;
   // glide.d2_loop = 0;
@@ -106,22 +112,26 @@ static void OnRightClick(WM_MESSAGE * pMsg)
     return ;
   }
   printf("rect.x0 %d\n", rect.x0);
-  if (rect.x0 >= 0) {
+  if (rect.x0 > 0) {
     return ;
   }
   // if (move >= 0) {
   //   return ;
   // }
   // move += 100;
+  glide.s_x = rect.x0;
+  glide.s_y = rect.y0;
 
   glide.d1_x = 10;
   glide.d1_y = 0;
   glide.d1_loop = 8;
-  glide.d2_x = 1;
+  glide.d2_x = 2;
   glide.d2_y = 0;
-  glide.d2_loop = 20;
+  glide.d2_loop = 10;
 
 
+  glide.e_x = rect.x0 + glide.d1_x*glide.d1_loop + glide.d2_x * glide.d2_loop;
+  glide.e_y = rect.y0 + glide.d1_y*glide.d1_loop + glide.d2_y * glide.d2_loop;
   // glide.d1_x = 100;
   // glide.d1_loop = 1;
   // glide.d2_loop = 0;
@@ -168,8 +178,8 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
     FRAMEWIN_SetClientColor(pMsg->hWin, COL_DIALOG_BK);
     FRAMEWIN_SetBorderSize(pMsg->hWin, 0);
     Init_Ctrl(pMsg);
-  // case WM_TOUCH:
-    
+  case WM_TOUCH:
+      DockDrop(pMsg);
   //   if (getlogxy(&touch)) {
       
   //     sprintf(strout, "logic %d %d", touch.x, touch.y);
@@ -182,7 +192,7 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
   //     TEXT_SetText(hWin, strout);
   //   }
     
-  //   break;
+    break;
   // case WM_PAINT:
   //   for (i = 0; i < sizeof(pt)/ sizeof(struct point); i++) {
   //     GUI_FillRect(pt[i].x, pt[i].y, pt[i].x + 2, pt[i].y + 2);

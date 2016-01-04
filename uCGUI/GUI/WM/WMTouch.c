@@ -131,7 +131,7 @@ static WM_HWIN _Screen2Win(GUI_PID_STATE* pState) {
 *   1 if touch message has been sent
 */
 int WM_HandlePID(void) {
-  int r = 0;
+  int r = 0,rdrop = 0;
   WM_MESSAGE Msg;
   WM_CRITICAL_HANDLE CHWin;
   GUI_PID_STATE State, StateNew;
@@ -164,6 +164,8 @@ int WM_HandlePID(void) {
        * Note that we may have to send 2 touch messages.
        */
       if (WM_PID__StateLast.Pressed | StateNew.Pressed) {    /* Only if pressed or just released */
+        rdrop = DockDrop(NULL);
+        rdrop = 0;
         Msg.MsgId = WM_TOUCH;
         r = 1;
         /*
@@ -189,7 +191,11 @@ int WM_HandlePID(void) {
               Msg.Data.p = (void*)&State;
             }
             GUI_DEBUG_LOG1 ("\nSending WM_Touch to LastWindow %d (out of area)", WM__CHWinLast.hWin);
-            WM__SendTouchMessage(WM__CHWinLast.hWin, &Msg);
+            if (rdrop == 0) {
+              WM__SendTouchMessage(WM__CHWinLast.hWin, &Msg);  
+
+            }
+            
             WM__CHWinLast.hWin = 0;
           }
         }
@@ -208,7 +214,10 @@ int WM_HandlePID(void) {
             WM__CHWinLast.hWin = 0;
           }
           Msg.Data.p = (void*)&State;
-          WM__SendTouchMessage(CHWin.hWin, &Msg);
+          if (rdrop == 0) {
+            WM__SendTouchMessage(CHWin.hWin, &Msg);  
+          }
+          
         }
       }
       /*

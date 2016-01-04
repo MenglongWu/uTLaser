@@ -6,6 +6,12 @@
 	\endcode
 */
 
+/*! \page Fix-2051216-1 Fix-2051216-1 : 修补2015-12-15修改ucgui触屏长按导致的缺陷
+
+在DockDrop里添加一个按键长按变量is_press，检测长按，同时消息处理函数里处理消息WM_NOTIFICATION_CLICKED，WM_NOTIFICATION_RELEASED时加入判断is_press的值，当触屏按下时间超过200ms、或者触屏滑动超过x个像素则将该值标记为1，否则为0
+
+*/- \subpage 
+
 /*! \page Bug-2051103-1 Bug-2051103-1-C : 
     屏幕校准后再次进入校准界面，程序崩溃
     
