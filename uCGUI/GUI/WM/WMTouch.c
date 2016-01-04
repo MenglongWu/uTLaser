@@ -165,7 +165,7 @@ int WM_HandlePID(void) {
        */
       if (WM_PID__StateLast.Pressed | StateNew.Pressed) {    /* Only if pressed or just released */
         rdrop = DockDrop(NULL);
-
+        rdrop = 0;
         Msg.MsgId = WM_TOUCH;
         r = 1;
         /*

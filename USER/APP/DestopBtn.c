@@ -51,8 +51,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   //   { BUTTON_CreateIndirect, "OK",           GUI_ID_OK,     120, 65, 80, 20 },
   //   { BUTTON_CreateIndirect, "Cancel",         GUI_ID_CANCEL,   120, 90, 80, 20 },
   
-  // {BUTTON_CreateIndirect,  "<",           GUI_ID_LEFT,  0,0,40,20},
-  // {BUTTON_CreateIndirect,  ">",           GUI_ID_RIGHT,  320-40,0,40,20},
+  {BUTTON_CreateIndirect,  "<",           GUI_ID_LEFT,  0,0,40,20},
+  {BUTTON_CreateIndirect,  ">",           GUI_ID_RIGHT,  320-40,0,40,20},
 
   // {BUTTON_CreateIndirect,   "PWM\r\nNormal",     GUI_ID_PWM_REVERSAL,   162,85,66,66},
   // {BUTTON_CreateIndirect,   "1us",           GUI_ID_PWM_WIDTH,  232,85,66,66},

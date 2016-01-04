@@ -82,8 +82,11 @@ int main(void)
 	int tick = 0;
 	WM_MESSAGE msg;
 	WM_HWIN hMain, hleft,hright;
+
+	Init_LaserPower();
 	USART_Configuration();
 	Init_LED();
+
 	
 	printf("\n\n----------------------------------------------------------------------------\n");
 	printf("        GLink uTLaser Runing\n");
@@ -142,16 +145,16 @@ int main(void)
 	Init_LaserPower();
 	// while (1) 
 	{
-		Ctrl_LaserPower(CTRL_LASER_HV);
+		// Ctrl_LaserPower(CTRL_LASER_HV);
 		// Delay_ms(200);
-		Ctrl_LaserPower(CTRL_LASER_MV);
+		// Ctrl_LaserPower(CTRL_LASER_MV);
 		// Delay_ms(200);
 		Ctrl_LaserPower(CTRL_LASER_LV);
 		// Delay_ms(200);
 
 		Ctrl_APD(CTRL_APD_20V);
 		// Delay_ms(1000);
-		Ctrl_APD(CTRL_APD_40V);
+		// Ctrl_APD(CTRL_APD_40V);
 		// Delay_ms(1000);
 	}
 #ifdef _DEBUG_

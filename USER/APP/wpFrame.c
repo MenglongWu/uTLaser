@@ -180,7 +180,7 @@ static WM_HWIN this = 0;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	// { FRAMEWIN_CreateIndirect,  "Owner drawn list box", 0,          0,  0, 320, 220 , FRAMEWIN_CF_MOVEABLE },
-  { FRAMEWIN_CreateIndirect,  "Owner drawn list box", 0,          0,  0, 420, 220 , FRAMEWIN_CF_MOVEABLE },
+  { FRAMEWIN_CreateIndirect,  "Owner drawn list box", 0,          0,  0, 360, 220 , FRAMEWIN_CF_MOVEABLE },
 	//	 { LISTBOX_CreateIndirect,	 0,						 GUI_ID_MULTIEDIT0,	10,	10, 100, 100, 0, 100 },
 	// /* Check box for multi select mode */
 	//	 { CHECKBOX_CreateIndirect,	0,						 GUI_ID_CHECK0,	 120,	10,	 0,	 0 },
@@ -681,20 +681,20 @@ static void Init_Ctrl(WM_MESSAGE * pMsg)
   BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(25,242,123));
   BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(25,242,123));
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_APD);
-  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(233,24,123));
-  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(221,24,123));
+  // BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(233,24,123));
+  // BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(221,24,123));
 	OnAPDClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_PWM);
-  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(2,100,13));
-  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(2,100,13));
+  // BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(2,100,13));
+  // BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(2,100,13));
 	OnPWMClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_PWM_REVERSAL);
-  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(2,100,103));
-  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(2,100,103));
+  // BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(2,100,103));
+  // BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(2,100,103));
 	OnReversalClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_PWM_WIDTH);
-  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(122,100,180));
-  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(122,100,180));
+  // BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(122,100,180));
+  // BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(122,100,180));
 	OnWidthClick(&msg);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_LASTER);
 	OnLaserClick(&msg);
@@ -704,8 +704,8 @@ static void Init_Ctrl(WM_MESSAGE * pMsg)
   BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(221,24,123));
 	BUTTON_SetTextColor(msg.hWinSrc, 0, COL_ENABLE);
 	msg.hWinSrc = WM_GetDialogItem(hDlg, GUI_ID_SETTING);
-  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(122,100,180));
-  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(122,100,180));
+  BUTTON_SetBkColor(msg.hWinSrc, 1, RGB(233,24,123));
+  BUTTON_SetBkColor(msg.hWinSrc, 0, RGB(221,24,123));
 	BUTTON_SetTextColor(msg.hWinSrc, 0, COL_ENABLE);
 
 	WM_HideWindow(this);
