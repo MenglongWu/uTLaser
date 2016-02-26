@@ -186,7 +186,7 @@ int main(void)
 	
 
 	GUI_Init();
-	// ShowLogo();
+	ShowLogo();
 	
 	g_en = 1;
 	TP_Init();

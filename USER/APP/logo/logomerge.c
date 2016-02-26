@@ -93,9 +93,9 @@ void ShowLogo()
 	GUI_DispStringAt(strout, 10, 226); 
 
 	
-	snprintf(strout, 60, "Come on everyone.Follow me.");
+	snprintf(strout, 60, "You ready?! Let's go!");
 	GUI_DispStringAt(strout, 70, 140); 
-	Delay_ms(1300);
+	Delay_ms(1500);
 	snprintf(strout, 60, "Put your hands down        ");
 	GUI_DispStringAt(strout, 70, 140); 
 	Delay_ms(1300);
