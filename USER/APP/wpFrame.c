@@ -212,7 +212,7 @@ int DockDrop(WM_MESSAGE *pMsg)
   static GUI_PID_STATE plast, pnew;
   static unsigned long tmlast = 0,tmnow = 0;
   // return ;
-  
+  return 0;  
   GUI_PID_GetState(&pnew);
   printf("[%d %d %d %d]\n", tmlast, pnew, plast.Pressed, pnew.Pressed);
 

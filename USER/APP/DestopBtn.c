@@ -73,7 +73,7 @@ static void OnLeftClick(WM_MESSAGE * pMsg)
   if (glide.en == 1) {
     return ;
   }
-  if (rect.x1 <= 200) {
+  if (rect.x1 < 320) {
     return ;
   }
   
@@ -148,14 +148,14 @@ static void Init_Ctrl(WM_MESSAGE * pMsg)
 
   hDlg = pMsg->hWin;
   hButton = WM_GetDialogItem(hDlg, GUI_ID_LEFT);
-  BUTTON_SetTextColor(hButton, 0, COL_DISABLE);
+  BUTTON_SetTextColor(hButton, 0, COL_BUTTON_BK);
   BUTTON_SetBkColor(hButton, 1, COL_DIALOG_BK);
   BUTTON_SetBkColor(hButton, 0, COL_DIALOG_BK);
 
   hButton = WM_GetDialogItem(hDlg, GUI_ID_RIGHT);
   BUTTON_SetBkColor(hButton, 1, COL_DIALOG_BK);
   BUTTON_SetBkColor(hButton, 0, COL_DIALOG_BK);
-  BUTTON_SetTextColor(hButton, 0, COL_DISABLE);
+  BUTTON_SetTextColor(hButton, 0, COL_BUTTON_BK);
 }
 /*********************************************************************
 *
