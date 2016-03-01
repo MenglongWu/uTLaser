@@ -144,6 +144,7 @@ void TIM5_IRQHandler(void)	   //1550nm控制
 
 extern volatile uint16_t g_touch_ms;
 volatile uint32_t g_en = 0,g_tickgui = 0;
+extern unsigned long g_ucgui_time_ms;
 void TIM6_IRQHandler(void)
 {
 #ifdef _DEBUG_
@@ -158,12 +159,12 @@ void TIM6_IRQHandler(void)
 			t = 0;
 		}
 #endif
-		if (g_en && g_tickgui++ > 20) {
+		if (g_en && g_tickgui++ > 10) {
 			ScanKey();
 			GUI_Exec();		
 			g_tickgui = 0;
 		}
-
+		g_ucgui_time_ms++;
 		if (g_touch_ms) {
 			g_touch_ms--;
 			if (g_touch_ms == 0) {

@@ -1,6 +1,7 @@
 #ifndef _USART_H_
 #define _USART_H_
 
+#include "stm32f10x_dma.h"
 
 #pragma diag_suppress 1295//函数参数是空必须声明成void
 

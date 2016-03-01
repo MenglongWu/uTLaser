@@ -10,6 +10,8 @@
 #pragma diag_suppress 68//强制转换有符号和无符号
 
 
+extern struct project_env g_env;
+
 #define RGB8(r,g,b)	 // todo
 #define RGB565(r,g,b)	 ((unsigned short) ( ((r) >> 3) << 11 ) | ( ((g) >> 2) << 5) | ( ((b) >> 3) << 0) )
 #define RGB24(r,g,b)		((unsigned long) ( (r) << 16 )		| ( (g) << 8)		| ( (b) << 0) )
@@ -52,6 +54,10 @@ struct wm_glide
 {
 	WM_HWIN hWin;
 	int en;
+	int s_x;
+	int s_y;
+	int e_x;
+	int e_y;
 	int d1_x;
 	int d1_y;
 	int d1_loop;
@@ -94,66 +100,29 @@ void Get_PWM(struct ctrl_pwm *val);
 // ***************************************************************************
 
 
-void USART_Configuration();
+
 void delayMs(uint16_t ms);
-void ADC_Configuration(void);
-uint16_t GetAD(uint8_t chx);
-void DAC_Configuration(void);
-void TIM2_Init(void);
-// void TIM3_Init(uint16_t);
+void USART_Configuration();
 void TIM3_Init(void);
 void TIM4_Init(uint16_t);
 void TIM5_Init(void);
 void TIM6_Init(void);
+void TP_EINT();
 void NVIC_Configuration(void);
 void FLASH_Configuration(void);
-float DbmToScale(float dbm);
-void Ctrl_RedLight(u8 v);
-void Ctrl_Wavelength(u8 Wavelength_Selection_state);
-void Ctrl_Operating_Mode(u8 Operating_Mode);
-void Ctrl_Power(struct ctrl_param *v);
-void AutoCtrlPower(void);
-void Ctrl_Timing_Device(u8 Timer);
-void Function_IO_config(void);
-void RedLightIOConfig(void);
-void External_Interrupt_Config(void);
-void External_Interrupt_EXIT_Init(void);
-void External_Interrupt_InterruptConfig(void);
-void LCD_DrawMain(void);
-void TurnOnPower(void);
-void TurnOffPower(void);
-void UI_ProWavelength(void);
-void UI_ProPower(void);
-void UI_ProMode(void);
-void UI_ProRedLight_ShutdownTimer(void);
-void ProChargerMonitor(void);
-float GetBattery();
-void ProTimerShutdown(void);
-int main(void);
-void DebugLookAD(void);
-void UI_ProductionAdjust(void);
-void UI_ProductConfig(void);
-void DrawFocus(int16_t x,int16_t y,uint32_t color);
-void IsHacker(void);
-int ProTick1963IsLive(void);
-void ProGet1963State(void);
-
-void LCD_Batter_Show( uint16_t x0, uint16_t y0 ,uint16_t rank )	;		
-void LCD_RedLight_Show( uint16_t x0, uint16_t y0 ,uint8_t flag);
-void LCD_Wavelength_Selection( uint16_t x0, uint16_t y0 ,uint16_t wave ,uint16_t Color, uint16_t BkColor );
-void LCD_Wavelength_Selection_Ex( uint16_t x0, uint16_t y0 ,uint16_t wave ,uint16_t Color, uint16_t BkColor );
-void LCD_OperatMode_Selection( uint16_t x0, uint16_t y0 ,uint16_t mode ,uint16_t Color, uint16_t BkColor );
-
-void LCD_Timing_Display( uint16_t x0, uint16_t y0 ,uint16_t on_off );
-void Show_Matrix_zimo(uint16_t Xpos, uint16_t Ypos, uint8_t *Buffer, uint16_t Wide_char, uint16_t High, uint16_t charColor, uint16_t bkColor);
-void LCD_Power_Control_Selection_Ex( uint16_t x0, uint16_t y0 ,int16_t Current_Power ,uint16_t CharColor, uint16_t BkColor );
-void GUI_Text_Show_Number(uint16_t x, uint16_t y, uint8_t number, uint16_t Color, uint16_t bkColor );
-void LCD_FLSAH_DrawPicture(uint16_t StartX,uint16_t StartY,uint16_t EndX,uint16_t EndY, uint8_t * pic);
-
-
-//uint32_t InputPanel(int8_t *str,uint32_t len);
-uint32_t InputPanel(int8_t *str,uint32_t len,uint32_t *outLen);
-
+void Init_LED();
+void Ctrl_LED(int index, int val);
+void Init_LaserPower();
+void Ctrl_LaserPower(int val);
+void Init_PWM(void);
+void Ctrl_PWM(struct ctrl_pwm *val);
+void Get_PWM(struct ctrl_pwm *val);
+void Init_APD();
+void Ctrl_APD(int val);
+void Init_PeripheralPower();
+void Ctrl_PeripheralPower(int val);
+void Init_Key();
+int32_t ScanKey();
 
 //启动版本信息
 #define TARGET_NAME		"uTLaser V1.0.2"    		//目标板名称

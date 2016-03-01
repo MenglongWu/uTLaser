@@ -53,6 +53,10 @@ struct adj_tp
  * @retval	0 无触屏
  */
 int gettouch(struct point *pt);
-
+void tp_adj(struct point *lcd, struct point *tp, struct adj_tp *retadj);
+void TC_Test();
+void tp_getadj(struct adj_tp *adj);
+void tp_setadj(struct adj_tp *adj);	
+void TC_Adj();
 
 #endif

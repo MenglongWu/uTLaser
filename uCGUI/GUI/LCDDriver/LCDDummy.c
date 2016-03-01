@@ -698,9 +698,10 @@ void GUI_X_ExecIdle(void)
 }
 
 /**** Timing routines - required for blinking ****/
+unsigned long g_ucgui_time_ms;
 int  GUI_X_GetTime(void)
 {
-	return 0;
+	return g_ucgui_time_ms;
 }
 void GUI_X_Delay(int Period)
 {

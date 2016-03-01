@@ -485,6 +485,16 @@
               <FileType>1</FileType>
               <FilePath>..\USER\APP\logo\hwg.c</FilePath>
             </File>
+            <File>
+              <FileName>uTLaserDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\uTLaserDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>speedtest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\speedtest.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4653,6 +4663,16 @@
               <FileType>1</FileType>
               <FilePath>..\USER\APP\logo\hwg.c</FilePath>
             </File>
+            <File>
+              <FileName>uTLaserDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\uTLaserDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>speedtest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\speedtest.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -8820,6 +8840,16 @@
               <FileName>hwg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\APP\logo\hwg.c</FilePath>
+            </File>
+            <File>
+              <FileName>uTLaserDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\uTLaserDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>speedtest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\speedtest.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -13029,6 +13059,16 @@
               <FileType>1</FileType>
               <FilePath>..\USER\APP\logo\hwg.c</FilePath>
             </File>
+            <File>
+              <FileName>uTLaserDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\uTLaserDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>speedtest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\speedtest.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -17236,6 +17276,16 @@
               <FileName>hwg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\APP\logo\hwg.c</FilePath>
+            </File>
+            <File>
+              <FileName>uTLaserDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\uTLaserDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>speedtest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\speedtest.c</FilePath>
             </File>
           </Files>
         </Group>
